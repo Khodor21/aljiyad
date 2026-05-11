@@ -1,0 +1,407 @@
+/* ═══════════════════════════════════════════════
+   خط ثمانية سانس — أوزان: عادي، متوسط، ثقيل
+   ═══════════════════════════════════════════════ */
+
+@font-face {
+  font-family: "Thmanyah Sans-Regular";
+  src: url("/fonts/thmanyahsans-Regular.otf") format("opentype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Thmanyah Sans-Medium";
+  src: url("/fonts/thmanyahsans-Medium.otf") format("opentype");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Thmanyah Sans-Bold";
+  src: url("/fonts/thmanyahsans-Bold.otf") format("opentype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ═══════════════════════════════════════════════
+   أساسيات عامة
+   ═══════════════════════════════════════════════ */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: "Thmanyah Sans", sans-serif;
+  font-weight: 400;
+  direction: rtl;
+  background-color: #0f2a38;
+  color: #ffffff;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* أوزان الخط المُفعّلة مباشرة */
+.font-regular {
+  font-weight: 400;
+}
+.font-medium {
+  font-weight: 500;
+}
+.font-bold {
+  font-weight: 700;
+}
+
+/* ═══════════════════════════════════════════════
+   الألوان
+   ═══════════════════════════════════════════════ */
+
+:root {
+  --primary: #1f3c4e;
+  --primary-light: #2a5066;
+  --primary-dark: #152b38;
+  --gold: #9c6114;
+  --gold-light: #c47d1a;
+  --gold-dark: #7a4c10;
+  --bg-deep: #0f2a38;
+  --white: #ffffff;
+}
+
+/* ═══════════════════════════════════════════════
+   نمط الخلفية الإسلامي الهندسي
+   ═══════════════════════════════════════════════ */
+
+.islamic-pattern {
+  background-color: var(--primary);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80'%3E%3Cpath d='M40 5L47 20L62 15L53 28L68 35L53 42L62 55L47 50L40 65L33 50L18 55L27 42L12 35L27 28L18 15L33 20Z' fill='none' stroke='rgba(156,97,20,0.06)' stroke-width='0.8'/%3E%3Ccircle cx='40' cy='35' r='12' fill='none' stroke='rgba(156,97,20,0.04)' stroke-width='0.5'/%3E%3C/svg%3E");
+  background-size: 80px 80px;
+}
+
+.islamic-pattern-dark {
+  background-color: var(--primary-dark);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80'%3E%3Cpath d='M40 5L47 20L62 15L53 28L68 35L53 42L62 55L47 50L40 65L33 50L18 55L27 42L12 35L27 28L18 15L33 20Z' fill='none' stroke='rgba(156,97,20,0.04)' stroke-width='0.8'/%3E%3C/svg%3E");
+  background-size: 80px 80px;
+}
+
+/* ═══════════════════════════════════════════════
+   تدرجات ذهبية
+   ═══════════════════════════════════════════════ */
+
+.gold-gradient {
+  background: linear-gradient(135deg, #c47d1a, #9c6114, #7a4c10);
+}
+
+.gold-gradient-text {
+  background: linear-gradient(135deg, #e8a838, #c47d1a, #9c6114);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ═══════════════════════════════════════════════
+   شريط التقدم
+   ═══════════════════════════════════════════════ */
+
+.progress-bar {
+  background: linear-gradient(90deg, #7a4c10, #9c6114, #c47d1a);
+  border-radius: 999px;
+  transition: width 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* ═══════════════════════════════════════════════
+   حالة المهمة المُنجزة
+   ═══════════════════════════════════════════════ */
+
+.task-done {
+  opacity: 0.7;
+  background: rgba(156, 97, 20, 0.08);
+}
+
+/* ═══════════════════════════════════════════════
+   المربع المخصص (Checkbox)
+   ═══════════════════════════════════════════════ */
+
+.custom-checkbox {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  width: 22px;
+  height: 22px;
+  border: 2px solid var(--gold);
+  border-radius: 6px;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+  background: transparent;
+}
+
+.custom-checkbox:hover {
+  border-color: var(--gold-light);
+  box-shadow: 0 0 0 3px rgba(156, 97, 20, 0.12);
+}
+
+.custom-checkbox:checked {
+  background: linear-gradient(135deg, #c47d1a, #9c6114);
+  border-color: #c47d1a;
+}
+
+.custom-checkbox:checked::after {
+  content: "✓";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.custom-checkbox:focus-visible {
+  outline: 2px solid var(--gold-light);
+  outline-offset: 2px;
+}
+
+/* ═══════════════════════════════════════════════
+   شريط التمرير المخصص
+   ═══════════════════════════════════════════════ */
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--primary-dark);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--gold);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--gold-light);
+}
+
+/* فايرفوكس */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--gold) var(--primary-dark);
+}
+
+/* ═══════════════════════════════════════════════
+   الحركات (Animations)
+   ═══════════════════════════════════════════════ */
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulseGold {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(156, 97, 20, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 10px rgba(156, 97, 20, 0);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+@keyframes toastIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -12px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.5s ease-out both;
+}
+
+.animate-pulse-gold {
+  animation: pulseGold 2s ease-in-out infinite;
+}
+
+/* ═══════════════════════════════════════════════
+   حقل الإدخال
+   ═══════════════════════════════════════════════ */
+
+.input-field {
+  font-family: "Thmanyah Sans", sans-serif;
+  font-weight: 500;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(156, 97, 20, 0.25);
+  border-radius: 12px;
+  padding: 12px 16px;
+  color: var(--white);
+  font-size: 15px;
+  width: 100%;
+  transition: all 0.3s ease;
+  outline: none;
+}
+
+.input-field:focus {
+  border-color: var(--gold);
+  box-shadow: 0 0 0 3px rgba(156, 97, 20, 0.15);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.input-field::placeholder {
+  color: rgba(255, 255, 255, 0.3);
+  font-weight: 400;
+}
+
+/* ═══════════════════════════════════════════════
+   الزر الذهبي
+   ═══════════════════════════════════════════════ */
+
+.btn-gold {
+  font-family: "Thmanyah Sans", sans-serif;
+  font-weight: 700;
+  background: linear-gradient(135deg, #c47d1a, #9c6114);
+  color: white;
+  padding: 12px 32px;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 16px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  text-decoration: none;
+}
+
+.btn-gold:hover {
+  background: linear-gradient(135deg, #d48a20, #a86a18);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 24px rgba(156, 97, 20, 0.4);
+}
+
+.btn-gold:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 8px rgba(156, 97, 20, 0.3);
+}
+
+.btn-gold:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.btn-gold:focus-visible {
+  outline: 2px solid var(--gold-light);
+  outline-offset: 2px;
+}
+
+/* ═══════════════════════════════════════════════
+   البطاقة
+   ═══════════════════════════════════════════════ */
+
+.card {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(156, 97, 20, 0.15);
+  border-radius: 16px;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+}
+
+.card:hover {
+  border-color: rgba(156, 97, 20, 0.3);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+/* ═══════════════════════════════════════════════
+   إشعار التوست
+   ═══════════════════════════════════════════════ */
+
+.toast-enter {
+  animation: toastIn 0.3s ease-out both;
+}
+
+/* ═══════════════════════════════════════════════
+   تحسينات إضافية
+   ═══════════════════════════════════════════════ */
+
+/* منع تحديد النصوص في الأزرار */
+button,
+.btn-gold {
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* تحسين مظهر العناصر التفاعلية على الأجهزة اللمسية */
+@media (hover: none) {
+  .card:hover {
+    border-color: rgba(156, 97, 20, 0.15);
+    background: rgba(255, 255, 255, 0.04);
+  }
+
+  .btn-gold:hover {
+    transform: none;
+    box-shadow: none;
+  }
+}
+
+/* تقليل الحركة للمستخدمين الذين يفضلون ذلك */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .animate-fade-in-up,
+  .animate-pulse-gold {
+    animation: none;
+  }
+}
+
+a,
+label, p, span, h3 {
+ font-family: "Thmanyah Sans", sans-serif;
+  font-weight: 600;}
+
+h1 {
+ font-family: "Thmanyah Sans", sans-serif;
+  font-weight: 700;}
