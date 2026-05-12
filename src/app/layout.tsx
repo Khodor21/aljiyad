@@ -1,15 +1,8 @@
 import type { Metadata } from "next";
-import { Cairo } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { ToastProvider } from "@/contexts/ToastContext";
 import Navbar from "@/components/Navbar";
-
-const cairo = Cairo({
-  subsets: ["arabic"],
-  weight: ["400", "600", "700", "800", "900"],
-  variable: "--font-cairo",
-});
 
 export const metadata: Metadata = {
   title: "تحدي العشر الأوائل من ذي الحجة",
