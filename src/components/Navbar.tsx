@@ -1,158 +1,154 @@
 "use client";
-
-import Link from "next/link";
-import Image from "next/image";
-import { usePathname } from "next/navigation";
-import { useAuth } from "@/contexts/AuthContext";
 import {
-  Menu,
-  X,
-  LogIn,
-  UserPlus,
-  LogOut,
-  Trophy,
-  BookOpen,
-  Info,
-  Shield,
   Home,
+  Info,
+  LogIn,
+  LogOut,
+  Shield,
+  Trophy,
+  UserPlus,
 } from "lucide-react";
-import { useState } from "react";
-import Logo from "../public/Logo.svg"
+import { useMemo, useState } from "react";
 
-export default function Navbar() {
-  const { user, appUser, loading, logout } = useAuth();
-  const pathname = usePathname();
-  const [mobileOpen, setMobileOpen] = useState(false);
+type NavLink = {
+  href: string;
+  label: string;
+  icon: typeof Home;
+};
 
-  const navLinks = [
-    { href: "/challenges", label: "التحديات", icon: Home },
-    { href: "/about", label: "حول التحدي", icon: Info },
-  ];
+export default function App() {
+  const [activePath, setActivePath] = useState("/challenges");
+  const [isLoggedIn, setIsLoggedIn] = useState(true);
+  const [isAdmin, setIsAdmin] = useState(true);
 
-  const authLinks = user
-    ? [
-        ...navLinks,
-        { href: "/profile", label: "الملف الشخصي", icon: Trophy },
-        ...(appUser?.admin
-          ? [{ href: "/admin", label: "لوحة التحكم", icon: Shield }]
-          : []),
-      ]
-    : navLinks;
+  const navLinks: NavLink[] = useMemo(
+    () => [
+      { href: "/challenges", label: "التحديات", icon: Home },
+      { href: "/about", label: "حول التحدي", icon: Info },
+    ],
+    [],
+  );
 
-  const isActive = (href: string) => pathname === href;
+  const authLinks = useMemo(() => {
+    if (!isLoggedIn) return navLinks;
+
+    return [
+      ...navLinks,
+      { href: "/profile", label: "الملف الشخصي", icon: Trophy },
+      ...(isAdmin
+        ? [{ href: "/admin", label: "لوحة التحكم", icon: Shield }]
+        : []),
+    ];
+  }, [isAdmin, isLoggedIn, navLinks]);
+
+  const mobileLinks = useMemo(() => authLinks.slice(0, 4), [authLinks]);
+
+  const isActive = (href: string) => activePath === href;
 
   return (
-    <nav className="fixed top-0 right-0 left-0 z-50 islamic-pattern border-b border-gold/20">
-      <div className="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
-        {/* الشعار */}
-        <Link href="/challenges" className="flex items-center gap-2">
-         <Image src={Logo} alt="logo is here" className="w-12 h-12 text-yellow" />
-        </Link>
+    <div className="" dir="rtl">
+      <nav className="fixed inset-x-0 top-0 z-50 border-b border-amber-300/20 bg-slate-950/90 backdrop-blur-xl">
+        <div className="mx-auto hidden md:flex h-16 max-w-6xl items-center justify-between px-4">
+          <button
+            type="button"
+            onClick={() => setActivePath("/challenges")}
+            className="flex items-center gap-2"
+          >
+            <div className="grid h-10 w-10 place-items-center rounded-xl bg-amber-200/15 text-amber-200">
+              <span className="text-xs font-bold">LOGO</span>
+            </div>
+          </button>
 
-        {/* روابط سطح المكتب */}
-        <div className="hidden md:flex items-center gap-1">
-          {authLinks.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-200 flex items-center gap-2 ${
-                isActive(link.href)
-                  ? "bg-gold/20 text-gold-light"
-                  : "text-white/70 hover:text-white hover:bg-white/5"
-              }`}
-            >
-              <link.icon size={16} />
-              {link.label}
-            </Link>
-          ))}
-
-          {user ? (
-            <button
-              onClick={logout}
-              className="mr-2 px-4 py-2 rounded-lg text-sm font-semibold text-red-300 hover:bg-red-500/10 transition-all flex items-center gap-2"
-            >
-              <LogOut size={16} />
-              خروج
-            </button>
-          ) : (
-            <div className="mr-2 flex items-center gap-2">
-              <Link
-                href="/auth/login"
-                className="px-4 py-2 rounded-lg text-sm font-semibold text-gold-light hover:bg-gold/10 transition-all flex items-center gap-2"
+          <div className="hidden items-center gap-1 md:flex">
+            {authLinks.map((link) => (
+              <button
+                key={link.href}
+                type="button"
+                onClick={() => setActivePath(link.href)}
+                className={`flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-semibold transition-all duration-200 ${
+                  isActive(link.href)
+                    ? "bg-amber-200/20 text-amber-100"
+                    : "text-white/70 hover:bg-white/5 hover:text-white"
+                }`}
               >
-                <LogIn size={16} />
+                <link.icon size={16} />
+                {link.label}
+              </button>
+            ))}
+
+            {isLoggedIn ? (
+              <button
+                type="button"
+                onClick={() => setIsLoggedIn(false)}
+                className="mr-2 flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-semibold text-red-300 transition-all hover:bg-red-500/10"
+              >
+                <LogOut size={16} />
+                خروج
+              </button>
+            ) : (
+              <div className="mr-2 flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => setIsLoggedIn(true)}
+                  className="flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-semibold text-amber-100 transition-all hover:bg-amber-400/10"
+                >
+                  <LogIn size={16} />
+                  دخول
+                </button>
+                <button
+                  type="button"
+                  className="flex items-center gap-2 rounded-lg bg-amber-200 px-4 py-2 text-sm font-semibold text-slate-950 transition hover:bg-amber-100"
+                >
+                  <UserPlus size={16} />
+                  حساب جديد
+                </button>
+              </div>
+            )}
+          </div>
+
+          <div className="flex items-center gap-2 md:hidden">
+            {isLoggedIn ? (
+              <button
+                type="button"
+                onClick={() => setIsLoggedIn(false)}
+                className="inline-flex h-10 items-center rounded-full border border-white/15 px-4 text-sm font-semibold text-white/90 transition hover:border-white/30"
+              >
+                <LogOut size={16} className="ml-2" />
+                خروج
+              </button>
+            ) : (
+              <button
+                type="button"
+                onClick={() => setIsLoggedIn(true)}
+                className="inline-flex h-10 items-center rounded-full bg-amber-200 px-4 text-sm font-semibold text-slate-950 transition hover:bg-amber-100"
+              >
+                <LogIn size={16} className="ml-2" />
                 دخول
-              </Link>
-              <Link
-                href="/auth/register"
-                className="btn-gold text-sm !py-2 !px-4 flex items-center gap-2"
-              >
-                <UserPlus size={16} />
-                حساب جديد
-              </Link>
-            </div>
-          )}
+              </button>
+            )}
+          </div>
         </div>
+      </nav>
 
-        {/* زر القائمة للجوال */}
-        <button
-          onClick={() => setMobileOpen(!mobileOpen)}
-          className="md:hidden text-white p-2"
-        >
-          {mobileOpen ? <X size={24} /> : <Menu size={24} />}
-        </button>
-      </div>
-
-      {/* قائمة الجوال */}
-      {mobileOpen && (
-        <div className="md:hidden islamic-pattern-dark border-t border-gold/10 px-4 py-3 space-y-1">
-          {authLinks.map((link) => (
-            <Link
+      <nav className="fixed inset-x-3 bottom-3 z-50 border border-white/10 bg-slate-900/95 p-1.5 backdrop-blur-xl md:hidden [padding-bottom:calc(0.375rem+env(safe-area-inset-bottom))]">
+        <div className="grid grid-cols-4 gap-1">
+          {mobileLinks.map((link) => (
+            <button
               key={link.href}
-              href={link.href}
-              onClick={() => setMobileOpen(false)}
-              className={`block px-4 py-3 rounded-lg text-sm font-semibold transition-all flex items-center gap-3 ${
+              type="button"
+              onClick={() => setActivePath(link.href)}
+              className={`flex min-h-14 flex-col items-center justify-center gap-1 px-1 text-[11px] font-semibold transition ${
                 isActive(link.href)
-                  ? "bg-gold/20 text-gold-light"
-                  : "text-white/70 hover:text-white hover:bg-white/5"
+                  ? "bg-amber-200/20 text-amber-100"
+                  : "text-white/65 hover:bg-white/5 hover:text-white"
               }`}
             >
-              <link.icon size={18} />
-              {link.label}
-            </Link>
-          ))}
-
-          {user ? (
-            <button
-              onClick={() => {
-                logout();
-                setMobileOpen(false);
-              }}
-              className="w-full text-right px-4 py-3 rounded-lg text-sm font-semibold text-red-300 hover:bg-red-500/10 transition-all flex items-center gap-3"
-            >
-              <LogOut size={18} />
-              تسجيل الخروج
+              <link.icon size={17} />
+              <span>{link.label}</span>
             </button>
-          ) : (
-            <div className="pt-2 space-y-2">
-              <Link
-                href="/auth/login"
-                onClick={() => setMobileOpen(false)}
-                className="block w-full text-center px-4 py-3 rounded-lg text-sm font-semibold text-gold-light border border-gold/30 hover:bg-gold/10 transition-all"
-              >
-                تسجيل الدخول
-              </Link>
-              <Link
-                href="/auth/register"
-                onClick={() => setMobileOpen(false)}
-                className="block w-full text-center btn-gold text-sm"
-              >
-                إنشاء حساب
-              </Link>
-            </div>
-          )}
+          ))}
         </div>
-      )}
-    </nav>
+      </nav>
+    </div>
   );
 }

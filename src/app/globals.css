@@ -398,10 +398,15 @@ button,
 }
 
 a,
-label, p, span, h3 {
- font-family: "Thmanyah Sans", sans-serif;
-  font-weight: 600;}
+label,
+p,
+span,
+h3 {
+  font-family: "Thmanyah Sans", sans-serif;
+  font-weight: 600;
+}
 
-h1 {
- font-family: "Thmanyah Sans", sans-serif;
-  font-weight: 700;}
+h1,h2 {
+  font-family: "Thmanyah Sans", sans-serif;
+  font-weight: 700;
+}
