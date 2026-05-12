@@ -18,6 +18,8 @@ import {
   updateDoc,
   serverTimestamp,
 } from "firebase/firestore";
+
+import type { LucideIcon } from "lucide-react"; // add this
 import {
   Loader2,
   Lock,
@@ -44,8 +46,6 @@ import {
   Award,
 } from "lucide-react";
 
-// ─── Types ───────────────────────────────────────────────────────────────────
-
 interface Task {
   id: string;
   name: string;
@@ -60,12 +60,7 @@ interface DayData {
   tasks: Task[];
 }
 
-// ─── Per-day environment labels & Lucide icons ────────────────────────────────
-
-const DAY_META: Record<
-  number,
-  { env: string; Icon: React.FC<{ size?: number; className?: string }> }
-> = {
+const DAY_META: Record<number, { env: string; Icon: LucideIcon }> = {
   1: { env: "صحراء النية", Icon: Sunrise },
   2: { env: "واحة الذكر", Icon: Star },
   3: { env: "بساتين التلاوة", Icon: BookOpen },
@@ -105,6 +100,7 @@ function StageNode({
   const meta = DAY_META[day.id] ?? { env: "", Icon: Star };
   const { Icon } = meta;
 
+  <Icon size={20} className="..." />;
   const base =
     "relative w-14 h-14 rounded-full flex flex-col items-center justify-center flex-shrink-0 border-2 transition-transform duration-200 select-none";
 
