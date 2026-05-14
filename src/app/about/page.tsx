@@ -28,7 +28,7 @@ export default function AboutPage() {
 
   const tips = [
     "الإكثار من ذكر الله: التكبير، التهليل، التسبيح، الاستغفار",
-    "المحافظة على الصلوات الخمس في جماعة",
+    "المحافظة على الصلوات الخمس في وقتها",
     "صيام التسعة الأيام الأولى من ذي الحجة",
     "الإكثار من تلاوة القرآن الكريم بتدبر",
     "التصدق وبذل المعروف للناس",
@@ -40,17 +40,14 @@ export default function AboutPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white pb-12">
       <div className="max-w-3xl mx-auto px-4 py-8">
         {/* الترويسة */}
         <div className="text-center mb-10 animate-fade-in-up">
-          <div className="w-16 h-16 rounded-2xl gold-gradient flex items-center justify-center mx-auto mb-4">
-            <BookOpen size={28} className="text-white" />
-          </div>
-          <h1 className="text-3xl font-black text-white mb-3">
-            حول <span className="gold-gradient-text">تحدي العشر الأوائل</span>
+          <h1 className="text-3xl font-black text-gold mb-3">
+            ما هو تحدي محراب العشر؟{" "}
           </h1>
-          <p className="text-white/50 text-sm leading-relaxed max-w-lg mx-auto">
+          <p className="text-primary/50 text-sm leading-relaxed max-w-lg mx-auto">
             تحدي يومي لمدة عشرة أيام يستهدف استغلال أفضل أيام الدنيا عند الله عز
             وجل
           </p>
@@ -64,13 +61,14 @@ export default function AboutPage() {
             <Quote size={60} />
           </div>
           <div className="relative z-10">
-            <p className="text-white/90 text-lg leading-loose font-semibold mb-3">
+            <p className="text-primary/90 text-lg leading-loose font-semibold mb-3">
               "ما من أيام العمل الصالح فيهن أحب إلى الله من هذه الأيام العشر"
             </p>
-            <p className="text-white/40 text-sm">رواه البخاري</p>
-            <p className="text-white/70 text-sm leading-relaxed mt-4">
-              قالوا: ولا الجهاد؟ قال: "ولا الجهاد، إلا رجل خرج يخاطر بنفسه وماله
-              فلم يرجع بشيء"
+            <p className="text-primary/40 text-sm">رواه البخاري</p>
+            <p className="text-primary/70 text-sm leading-relaxed mt-4">
+              قالوا : يا رسولَ اللهِ ولا الجهادُ في سبيلِ اللهِ ؟ فقال رسولُ
+              اللهِ صلَّى اللهُ عليه وسلَّم : ولا الجهادُ في سبيلِ اللهِ إلَّا
+              رجل خرج بنفسِه ومالِه فلم يرجِعْ من ذلك بشيءٍ{" "}
             </p>
           </div>
         </div>
@@ -87,10 +85,10 @@ export default function AboutPage() {
                   <item.icon size={18} className="text-gold-light" />
                 </div>
                 <div>
-                  <h3 className="font-bold text-sm text-white mb-1">
+                  <h3 className="font-bold text-sm text-primary mb-1">
                     {item.title}
                   </h3>
-                  <p className="text-xs text-white/50 leading-relaxed">
+                  <p className="text-xs text-primary/50 leading-relaxed">
                     {item.text}
                   </p>
                 </div>
@@ -103,7 +101,7 @@ export default function AboutPage() {
           className="card p-6 mb-8 animate-fade-in-up"
           style={{ animationDelay: "0.4s" }}
         >
-          <h2 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
+          <h2 className="text-lg font-bold text-primary mb-4 flex items-center gap-2">
             <Star size={18} className="text-gold" />
             نصائح لاستغلال العشر
           </h2>
@@ -115,7 +113,7 @@ export default function AboutPage() {
                     {i + 1}
                   </span>
                 </div>
-                <p className="text-sm text-white/60 leading-relaxed">{tip}</p>
+                <p className="text-sm text-primary/60 leading-relaxed">{tip}</p>
               </div>
             ))}
           </div>
@@ -125,7 +123,7 @@ export default function AboutPage() {
           className="card p-6 animate-fade-in-up"
           style={{ animationDelay: "0.5s" }}
         >
-          <h2 className="text-lg font-bold text-white mb-4">
+          <h2 className="text-lg font-bold text-primary mb-4">
             كيف يعمل التحدي؟
           </h2>
           <div className="space-y-4">
@@ -148,7 +146,7 @@ export default function AboutPage() {
                     {item.step}
                   </span>
                 </div>
-                <p className="text-sm text-white/60 leading-relaxed pt-1">
+                <p className="text-sm text-primary/60 leading-relaxed pt-1">
                   {item.text}
                 </p>
               </div>

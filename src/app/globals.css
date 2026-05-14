@@ -2,25 +2,28 @@
    خط ثمانية سانس — أوزان: عادي، متوسط، ثقيل
    ═══════════════════════════════════════════════ */
 
+/* Regular (Weight 400) */
 @font-face {
-  font-family: "Thmanyah Sans-Regular";
-  src: url("/fonts/thmanyahsans-Regular.otf") format("opentype");
+  font-family: "Thmanyah Sans";
+  src: url("../public/fonts/thmanyahsans-Regular.otf") format("opentype");
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
 
+/* Medium (Weight 500) */
 @font-face {
-  font-family: "Thmanyah Sans-Medium";
-  src: url("/fonts/thmanyahsans-Medium.otf") format("opentype");
+  font-family: "Thmanyah Sans";
+  src: url("../public/fonts/thmanyahsans-Medium.otf") format("opentype");
   font-weight: 500;
   font-style: normal;
   font-display: swap;
 }
 
+/* Bold (Weight 700) */
 @font-face {
-  font-family: "Thmanyah Sans-Bold";
-  src: url("/fonts/thmanyahsans-Bold.otf") format("opentype");
+  font-family: "Thmanyah Sans";
+  src: url("../public/fonts/thmanyahsans-Bold.otf") format("opentype");
   font-weight: 700;
   font-style: normal;
   font-display: swap;
@@ -397,16 +400,19 @@ button,
   }
 }
 
+/* تم تغيير الوزن هنا من 600 إلى 500 ليتوافق مع الملفات المحملة */
 a,
 label,
 p,
 span,
-h3 {
+h3,
+div {
   font-family: "Thmanyah Sans", sans-serif;
-  font-weight: 600;
+  font-weight: 500;
 }
 
-h1,h2 {
+h1,
+h2 {
   font-family: "Thmanyah Sans", sans-serif;
   font-weight: 700;
 }

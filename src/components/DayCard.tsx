@@ -76,7 +76,7 @@ export default function DayCard({
         <div
           className={`w-14 h-14 rounded-xl flex flex-col items-center justify-center flex-shrink-0 ${
             isComplete
-              ? "gold-gradient text-primary"
+              ? "gold-gradient text-white text-primary"
               : unlocked
                 ? "bg-gold/15 text-gold-light"
                 : "bg-primary/5 text-primary/30"
