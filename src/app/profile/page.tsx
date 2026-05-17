@@ -32,12 +32,22 @@ interface LeaderboardUser {
   points: number;
 }
 
+// Build a flat map of taskId → points from the JSON for fast lookup
+const TASK_POINTS_MAP: Record<string, number> = {};
+(defaultChallenges as any[]).forEach((day) => {
+  day.tasks.forEach((task: any) => {
+    TASK_POINTS_MAP[task.id] = task.points;
+  });
+});
+
 export default function ProfilePage() {
   const { user, appUser, loading: authLoading } = useAuth();
   const router = useRouter();
 
   const [loading, setLoading] = useState(true);
   const [completions, setCompletions] = useState<Record<string, boolean>>({});
+  // FIX #3: computed from subcollection × JSON points, identical to challenges page
+  const [totalPoints, setTotalPoints] = useState(0);
   const [leaderboard, setLeaderboard] = useState<LeaderboardUser[]>([]);
   const [userRank, setUserRank] = useState<number | null>(null);
 
@@ -50,15 +60,28 @@ export default function ProfilePage() {
 
     const loadData = async () => {
       try {
+        // Load completions subcollection
         const compSnap = await getDocs(
           collection(db, "completions", user.uid, "tasks"),
         );
+
         const compMap: Record<string, boolean> = {};
+        let computedPoints = 0;
+
         compSnap.forEach((d) => {
           compMap[d.id] = true;
+          // Always resolve points from JSON definition — single source of truth.
+          // Fall back to stored points if JSON entry somehow missing.
+          const jsonPoints = TASK_POINTS_MAP[d.id];
+          const storedPoints = (d.data().points as number) || 0;
+          computedPoints +=
+            jsonPoints !== undefined ? jsonPoints : storedPoints;
         });
-        setCompletions(compMap);
 
+        setCompletions(compMap);
+        setTotalPoints(computedPoints);
+
+        // Leaderboard
         const lbQuery = query(
           collection(db, "users"),
           orderBy("points", "desc"),
@@ -89,13 +112,14 @@ export default function ProfilePage() {
 
   const getStats = (): BadgeStats => {
     const fullyCompletedDays: number[] = [];
-    defaultChallenges.forEach((day: any) => {
+    (defaultChallenges as any[]).forEach((day) => {
       const allDone = day.tasks.every((t: any) => completions[t.id]);
       if (allDone) fullyCompletedDays.push(day.id);
     });
     return {
       completedDays: fullyCompletedDays.length,
-      totalPoints: appUser?.points || 0,
+      // Use the recomputed points from JSON — same number the challenges page shows
+      totalPoints,
       fullyCompletedDays,
       allCompletions: completions,
     };
@@ -148,8 +172,9 @@ export default function ProfilePage() {
           <div className="relative grid grid-cols-3 gap-3 mt-5">
             <div className="bg-gold/[0.07] border border-gold/10 rounded-xl p-3 text-center">
               <TrendingUp size={16} className="text-gold mx-auto mb-1.5" />
+              {/* FIX #3: totalPoints is now recomputed from completions × JSON points */}
               <div className="text-2xl font-black text-gold leading-none">
-                {appUser.points || 0}
+                {totalPoints}
               </div>
               <div className="text-[10px] text-gray-400 mt-1 font-medium">
                 نقطة
@@ -230,7 +255,6 @@ export default function ProfilePage() {
                           : "border border-transparent"
                     }`}
                   >
-                    {/* الترتيب */}
                     <div
                       className={`w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0 text-xs font-black ${
                         isTop3
@@ -245,7 +269,6 @@ export default function ProfilePage() {
                       {isTop3 ? topThreeIcons[i] : i + 1}
                     </div>
 
-                    {/* الاسم */}
                     <span
                       className={`flex-1 text-sm truncate ${
                         isMe
@@ -263,7 +286,6 @@ export default function ProfilePage() {
                       )}
                     </span>
 
-                    {/* النقاط */}
                     <span
                       className={`text-sm font-bold tabular-nums ${
                         isMe
