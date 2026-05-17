@@ -1,5 +1,7 @@
 "use client";
 import Link from "next/link";
+import { useAuth } from "@/contexts/AuthContext";
+import { useRouter } from "next/navigation";
 import { usePathname } from "next/navigation";
 import { FaRightToBracket, FaRightFromBracket } from "react-icons/fa6";
 import { LuUserRound } from "react-icons/lu";
@@ -8,6 +10,8 @@ import { CiTrophy } from "react-icons/ci";
 import Logo from "../public/Logo.svg";
 import { useMemo, useState } from "react";
 import { IoShieldOutline } from "react-icons/io5";
+import { FaInstagram } from "react-icons/fa";
+
 import Image from "next/image";
 type NavLink = {
   href: string;
@@ -18,10 +22,16 @@ type NavLink = {
 export default function App() {
   // Get the real current path from Next.js
   const pathname = usePathname();
+  const router = useRouter();
 
-  const [isLoggedIn, setIsLoggedIn] = useState(true);
-  const [isAdmin, setIsAdmin] = useState(true);
+  const { user, appUser, logout } = useAuth();
 
+  const isLoggedIn = !!user;
+  const isAdmin = !!appUser?.admin;
+  const handleLogout = async () => {
+    await logout();
+    router.push("/auth/login");
+  };
   const navLinks: NavLink[] = useMemo(
     () => [
       { href: "/challenges", label: "التحديات", icon: CiTrophy },
@@ -38,7 +48,13 @@ export default function App() {
       { href: "/profile", label: "الملف الشخصي", icon: LuUserRound },
       ...(isAdmin
         ? [{ href: "/admin", label: "لوحة التحكم", icon: IoShieldOutline }]
-        : []),
+        : [
+            {
+              href: "https://www.instagram.com/al.jiyad0/",
+              label: "تابعونا",
+              icon: FaInstagram,
+            },
+          ]),
     ];
   }, [isAdmin, isLoggedIn, navLinks]);
 
@@ -53,7 +69,7 @@ export default function App() {
           {/* Logo Link */}
           <Link href="/challenges" className="flex items-center gap-2">
             <div className="grid h-10 w-10 place-items-center rounded-xl bg-amber-200/15 text-amber-200">
-<Image alt="logo" src={Logo} />
+              <Image alt="logo" src={Logo} />
             </div>
           </Link>
 
@@ -77,7 +93,7 @@ export default function App() {
             {isLoggedIn ? (
               <button
                 type="button"
-                onClick={() => setIsLoggedIn(false)}
+                onClick={handleLogout}
                 className="mr-2 flex items-center gap-2 rounded-lg px-4 py-2 text-xs font-semibold text-red-300 transition-all bg-red"
               >
                 <FaRightFromBracket className="w-3 h-3" />
@@ -87,7 +103,7 @@ export default function App() {
               <div className="mr-2 flex items-center gap-2">
                 <button
                   type="button"
-                  onClick={() => setIsLoggedIn(true)}
+                  onClick={() => router.push("/auth/login")}
                   className="flex items-center gap-2 rounded-lg px-4 py-2 text-xs font-semibold text-amber-100 transition-all bg-amber-400/10"
                 >
                   <FaRightToBracket className="w-3 h-3" />
@@ -95,6 +111,7 @@ export default function App() {
                 </button>
                 <button
                   type="button"
+                  onClick={() => router.push("/auth/register")}
                   className="flex items-center gap-2 rounded-lg bg-amber-200 px-4 py-2 text-sm font-semibold text-slate-950 transition hover:bg-amber-100"
                 >
                   <LuUserRound className="w-4 h-4" />
@@ -109,7 +126,7 @@ export default function App() {
             {isLoggedIn ? (
               <button
                 type="button"
-                onClick={() => setIsLoggedIn(false)}
+                onClick={handleLogout}
                 className="inline-flex h-10 items-center rounded-full border border-white/15 px-4 text-sm font-semibold text-white/90 transition hover:border-white/30"
               >
                 <FaRightFromBracket className="w-4 h-4 ml-2" />
@@ -118,7 +135,7 @@ export default function App() {
             ) : (
               <button
                 type="button"
-                onClick={() => setIsLoggedIn(true)}
+                onClick={() => router.push("/auth/login")}
                 className="inline-flex h-10 items-center rounded-full bg-amber-200 px-4 text-sm font-semibold text-slate-950 transition hover:bg-amber-100"
               >
                 <FaRightToBracket className="w-4 h-4 ml-2" />
