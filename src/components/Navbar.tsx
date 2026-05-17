@@ -5,10 +5,10 @@ import { FaRightToBracket, FaRightFromBracket } from "react-icons/fa6";
 import { LuUserRound } from "react-icons/lu";
 import { FiInfo } from "react-icons/fi";
 import { CiTrophy } from "react-icons/ci";
-
+import Logo from "../public/Logo.svg";
 import { useMemo, useState } from "react";
 import { IoShieldOutline } from "react-icons/io5";
-
+import Image from "next/image";
 type NavLink = {
   href: string;
   label: string;
@@ -25,7 +25,7 @@ export default function App() {
   const navLinks: NavLink[] = useMemo(
     () => [
       { href: "/challenges", label: "التحديات", icon: CiTrophy },
-      { href: "/about", label: "حول التحدي", icon: FiInfo },
+      { href: "/about", label: "عن التحدي", icon: FiInfo },
     ],
     [],
   );
@@ -48,12 +48,12 @@ export default function App() {
 
   return (
     <div className="" dir="rtl">
-      <nav className="fixed inset-x-0 top-0 z-50 border-b border-amber-300/20 bg-slate-950/90 backdrop-blur-xl">
+      <nav className="fixed inset-x-0 top-0 z-50 border-b border-amber-300/20 bg-white/90 backdrop-blur-xl">
         <div className="mx-auto hidden md:flex h-16 max-w-6xl items-center justify-between px-4">
           {/* Logo Link */}
           <Link href="/challenges" className="flex items-center gap-2">
             <div className="grid h-10 w-10 place-items-center rounded-xl bg-amber-200/15 text-amber-200">
-              <span className="text-xs font-bold">LOGO</span>
+<Image alt="logo" src={Logo} />
             </div>
           </Link>
 
@@ -64,8 +64,8 @@ export default function App() {
                 href={link.href}
                 className={`flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-semibold transition-all duration-200 ${
                   isActive(link.href)
-                    ? "bg-amber-200/20 text-amber-100"
-                    : "text-white/70 hover:bg-white/5 hover:text-white"
+                    ? "bg-amber-gold text-amber-100"
+                    : "text-gold/70 hover:bg-white/5 hover:text-white"
                 }`}
               >
                 {/* Icons sized with w-4 h-4 (16px) */}
@@ -78,9 +78,9 @@ export default function App() {
               <button
                 type="button"
                 onClick={() => setIsLoggedIn(false)}
-                className="mr-2 flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-semibold text-red-300 transition-all hover:bg-red-500/10"
+                className="mr-2 flex items-center gap-2 rounded-lg px-4 py-2 text-xs font-semibold text-red-300 transition-all bg-red"
               >
-                <FaRightFromBracket className="w-4 h-4" />
+                <FaRightFromBracket className="w-3 h-3" />
                 خروج
               </button>
             ) : (
@@ -88,9 +88,9 @@ export default function App() {
                 <button
                   type="button"
                   onClick={() => setIsLoggedIn(true)}
-                  className="flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-semibold text-amber-100 transition-all hover:bg-amber-400/10"
+                  className="flex items-center gap-2 rounded-lg px-4 py-2 text-xs font-semibold text-amber-100 transition-all bg-amber-400/10"
                 >
-                  <FaRightToBracket className="w-4 h-4" />
+                  <FaRightToBracket className="w-3 h-3" />
                   دخول
                 </button>
                 <button
@@ -136,7 +136,7 @@ export default function App() {
             <Link
               key={link.href}
               href={link.href}
-              className={`flex min-h-14 w-full flex-col items-center justify-center gap-1 px-1 text-sm font-semibold transition ${
+              className={`flex min-h-14 w-full flex-col items-center justify-center x-1 transition ${
                 isActive(link.href)
                   ? "text-gold"
                   : "text-black hover:text-gold/80"
@@ -144,7 +144,7 @@ export default function App() {
             >
               {/* Icons sized with w-5 h-5 (20px) for mobile visibility */}
               <link.icon className="w-5 h-5" />
-              <span>{link.label}</span>
+              <span className="text-[13px]">{link.label}</span>
             </Link>
           ))}
         </div>

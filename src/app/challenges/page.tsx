@@ -19,13 +19,11 @@ import {
   serverTimestamp,
 } from "firebase/firestore";
 
-import type { LucideIcon } from "lucide-react"; // add this
+import type { LucideIcon } from "lucide-react";
 import {
   Loader2,
   Lock,
   CheckCircle2,
-  ChevronDown,
-  ChevronUp,
   Circle,
   Check,
   Star,
@@ -73,8 +71,6 @@ const DAY_META: Record<number, { env: string; Icon: LucideIcon }> = {
   10: { env: "أبواب مكة", Icon: Moon },
 };
 
-// ─── Helpers ──────────────────────────────────────────────────────────────────
-
 const getUnlockedDays = (): number => {
   const now = new Date();
   const diffMs = now.getTime() - CHALLENGE_START_DATE.getTime();
@@ -82,147 +78,7 @@ const getUnlockedDays = (): number => {
   return Math.min(Math.max(diffDays + 1, 1), CHALLENGE_DURATION_DAYS);
 };
 
-// ─── Sub-components ───────────────────────────────────────────────────────────
-
-function StageNode({
-  day,
-  unlocked,
-  allDone,
-  isCurrent,
-  onClick,
-}: {
-  day: DayData;
-  unlocked: boolean;
-  allDone: boolean;
-  isCurrent: boolean;
-  onClick: () => void;
-}) {
-  const meta = DAY_META[day.id] ?? { env: "", Icon: Star };
-  const { Icon } = meta;
-
-  <Icon size={20} className="..." />;
-  const base =
-    "relative w-14 h-14 rounded-full flex flex-col items-center justify-center flex-shrink-0 border-2 transition-transform duration-200 select-none";
-
-  const style = !unlocked
-    ? "border-primary/20 bg-white/60 cursor-default"
-    : allDone
-      ? "border-[#3a7a2a] bg-[#eef6de] cursor-pointer hover:scale-105"
-      : isCurrent
-        ? "border-gold bg-white cursor-pointer hover:scale-105 shadow-[0_0_0_4px_rgba(156,97,20,0.12)] animate-pulse-soft"
-        : "border-gold/50 bg-white cursor-pointer hover:scale-105";
-
-  return (
-    <button
-      onClick={onClick}
-      className={`${base} ${style}`}
-      aria-label={`اليوم ${day.id}: ${day.title}`}
-    >
-      {/* Outer ring decoration */}
-      <span className="absolute inset-[-5px] rounded-full border border-dashed border-gold/20 pointer-events-none" />
-
-      {!unlocked ? (
-        <Lock size={20} className="text-primary/30" />
-      ) : allDone ? (
-        <CheckCircle2 size={22} className="text-[#3a7a2a]" />
-      ) : (
-        <Icon
-          size={20}
-          className={isCurrent ? "text-gold" : "text-primary/70"}
-        />
-      )}
-
-      <span
-        className={`text-[9px] mt-0.5 font-medium font-sans leading-none ${
-          !unlocked
-            ? "text-primary/30"
-            : allDone
-              ? "text-[#3a7a2a]"
-              : isCurrent
-                ? "text-gold"
-                : "text-primary/50"
-        }`}
-      >
-        {allDone ? "مكتمل" : `يوم ${day.id}`}
-      </span>
-    </button>
-  );
-}
-
-function StageCard({
-  day,
-  unlocked,
-  doneTasks,
-  isOpen,
-  isCurrent,
-  onClick,
-}: {
-  day: DayData;
-  unlocked: boolean;
-  doneTasks: number;
-  isOpen: boolean;
-  isCurrent: boolean;
-  onClick: () => void;
-}) {
-  const meta = DAY_META[day.id] ?? { env: "", Icon: Star };
-  const totalPts = day.tasks.reduce((s, t) => s + t.points, 0);
-
-  return (
-    <button
-      onClick={onClick}
-      disabled={!unlocked}
-      className={`
-        flex-1 max-w-[200px] text-right rounded-xl border px-3 py-2.5 transition-all duration-200
-        ${
-          !unlocked
-            ? "opacity-40 cursor-default border-primary/10 bg-white/50"
-            : isOpen
-              ? "border-gold bg-white shadow-sm"
-              : "border-primary/15 bg-white hover:border-gold/50 hover:bg-amber-50/30"
-        }
-      `}
-    >
-      {isCurrent && (
-        <div className="flex items-center gap-1.5 mb-1">
-          <span className="w-1.5 h-1.5 rounded-full bg-gold animate-ping-soft inline-block" />
-          <span className="text-[10px] text-gold font-sans">أنت هنا</span>
-        </div>
-      )}
-
-      {/* Environment badge */}
-      <span className="inline-block text-[9px] font-sans px-2 py-0.5 rounded-full bg-primary/8 text-primary/60 mb-1 border border-primary/10">
-        {meta.env}
-      </span>
-
-      <p
-        className="text-sm font-bold text-primary leading-snug"
-        style={{ fontFamily: "var(--font-arabic, 'Amiri', serif)" }}
-      >
-        {day.title}
-      </p>
-      <p className="text-[10px] text-primary/50 font-sans leading-snug mt-0.5">
-        {day.description}
-      </p>
-
-      {unlocked && (
-        <div className="flex items-center justify-between mt-1.5">
-          <span className="text-[9px] font-sans border border-gold/30 text-gold rounded-full px-2 py-0.5">
-            {doneTasks}/{day.tasks.length} مهام
-          </span>
-          <span className="text-[9px] font-sans text-primary/40">
-            {totalPts} نقطة
-          </span>
-        </div>
-      )}
-
-      {!unlocked && (
-        <span className="text-[9px] font-sans text-primary/30 mt-1 block">
-          مقفل
-        </span>
-      )}
-    </button>
-  );
-}
+// ─── Task Row ─────────────────────────────────────────────────────────────────
 
 function TaskRow({
   task,
@@ -243,8 +99,8 @@ function TaskRow({
         w-full flex items-center gap-3 px-3 py-2.5 rounded-xl border text-right transition-all duration-150
         ${
           completed
-            ? "bg-[#eef6de] border-[#a8d07a]/40"
-            : "bg-white border-primary/10 hover:border-gold/30 hover:bg-amber-50/20"
+            ? "bg-amber-50 border-amber-200/60"
+            : "bg-white border-stone-200 hover:border-amber-300 hover:bg-amber-50/40"
         }
         ${toggling ? "opacity-60 cursor-wait" : "cursor-pointer"}
       `}
@@ -252,71 +108,238 @@ function TaskRow({
       <div
         className={`
           w-6 h-6 rounded-full border-2 flex items-center justify-center flex-shrink-0 transition-all
-          ${completed ? "bg-[#3a7a2a] border-[#3a7a2a]" : "border-gold/40 bg-white"}
+          ${completed ? "bg-amber-600 border-amber-600" : "border-amber-400/60 bg-white"}
         `}
       >
         {completed && (
           <Check size={13} className="text-white" strokeWidth={2.5} />
         )}
         {toggling && !completed && (
-          <Loader2 size={12} className="animate-spin text-gold" />
+          <Loader2 size={12} className="animate-spin text-amber-600" />
         )}
       </div>
 
       <span
-        className={`flex-1 text-xs font-sans leading-snug ${
+        className={`flex-1 text-xs leading-snug ${
           completed
-            ? "text-[#3a7a2a] line-through decoration-[#3a7a2a]/40"
-            : "text-primary"
+            ? "text-amber-700 line-through decoration-amber-400/50"
+            : "text-stone-700"
         }`}
       >
         {task.name}
       </span>
 
-      <span className="text-[10px] font-sans text-gold font-medium flex-shrink-0">
+      <span className="text-[10px] text-amber-600 font-medium flex-shrink-0">
         +{task.points}
       </span>
     </button>
   );
 }
 
+// ─── Day Card ─────────────────────────────────────────────────────────────────
+
+function DayCard({
+  day,
+  unlocked,
+  doneTasks,
+  isOpen,
+  isCurrent,
+  isDone,
+  isFirst,
+  isLast,
+  onClick,
+}: {
+  day: DayData;
+  unlocked: boolean;
+  doneTasks: number;
+  isOpen: boolean;
+  isCurrent: boolean;
+  isDone: boolean;
+  isFirst: boolean;
+  isLast: boolean;
+  onClick: () => void;
+}) {
+  const meta = DAY_META[day.id] ?? { env: "", Icon: Star };
+  const { Icon } = meta;
+  const locked = !unlocked;
+
+  return (
+    <div className="flex gap-3 items-start">
+      {/* Timeline column */}
+      <div className="flex flex-col items-center flex-shrink-0 w-10">
+        {/* Top connector */}
+        <div
+          className={`w-px flex-shrink-0 ${isFirst ? "h-3" : "h-3"} ${
+            isDone ? "bg-amber-400" : "bg-stone-200"
+          }`}
+        />
+
+        {/* Node */}
+        <div
+          className={`
+            w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 border-2 transition-all
+            ${
+              isDone
+                ? "bg-amber-600 border-amber-600"
+                : isCurrent
+                  ? "bg-white border-amber-500 shadow-[0_0_0_4px_rgba(217,119,6,0.12)]"
+                  : "bg-stone-100 border-stone-200"
+            }
+          `}
+          style={
+            isCurrent ? { animation: "pulseRing 2s ease-in-out infinite" } : {}
+          }
+        >
+          {isDone ? (
+            <Check size={18} className="text-white" strokeWidth={2.5} />
+          ) : locked ? (
+            <Lock size={15} className="text-stone-400" />
+          ) : (
+            <Icon
+              size={17}
+              className={isCurrent ? "text-amber-600" : "text-stone-400"}
+            />
+          )}
+        </div>
+
+        {/* Bottom connector */}
+        {!isLast && (
+          <div
+            className={`w-px flex-1 min-h-[20px] ${
+              isDone ? "bg-amber-400" : "bg-stone-200"
+            }`}
+          />
+        )}
+      </div>
+
+      {/* Card */}
+      <div className="flex-1 pb-3">
+        <button
+          onClick={onClick}
+          disabled={locked}
+          className={`
+            w-full text-right rounded-2xl border transition-all duration-200
+            ${
+              locked
+                ? "bg-stone-50 border-stone-100 opacity-50 cursor-default"
+                : isDone
+                  ? "bg-white border-stone-200 hover:border-amber-200"
+                  : isCurrent
+                    ? "bg-white border-amber-400 border-2 shadow-[0_4px_24px_rgba(217,119,6,0.12)]"
+                    : "bg-white border-stone-200 hover:border-amber-200"
+            }
+          `}
+        >
+          <div className="px-4 py-3">
+            {/* Header row */}
+            <div className="flex items-center justify-between gap-2">
+              <div className="flex items-center gap-2 flex-1 min-w-0">
+                {/* Day badge */}
+                <span
+                  className={`text-[10px] font-medium px-2 py-0.5 rounded-full flex-shrink-0 ${
+                    isDone
+                      ? "bg-amber-100 text-amber-700"
+                      : isCurrent
+                        ? "bg-amber-600 text-white"
+                        : "bg-stone-100 text-stone-400"
+                  }`}
+                >
+                  يوم {day.id}
+                </span>
+
+                {/* Environment label */}
+                {!locked && (
+                  <span className="text-[10px] text-stone-400 truncate">
+                    {meta.env}
+                  </span>
+                )}
+              </div>
+
+              {/* Status indicator */}
+              {isDone && (
+                <span className="text-[10px] text-amber-600 font-medium flex items-center gap-1 flex-shrink-0">
+                  <CheckCircle2 size={11} />
+                  مكتمل
+                </span>
+              )}
+              {isCurrent && (
+                <span className="text-[10px] text-amber-600 font-medium flex-shrink-0 flex items-center gap-1">
+                  <span className="w-1.5 h-1.5 rounded-full bg-amber-500 inline-block animate-pulse" />
+                  أنت هنا
+                </span>
+              )}
+              {locked && (
+                <span className="text-[10px] text-stone-300 flex-shrink-0">
+                  مقفل
+                </span>
+              )}
+            </div>
+
+            {/* Title */}
+            <p
+              className={`mt-2 text-sm leading-relaxed font-medium ${
+                isCurrent
+                  ? "text-stone-800 text-base"
+                  : isDone
+                    ? "text-stone-500"
+                    : "text-stone-400"
+              }`}
+            >
+              {day.title}
+            </p>
+
+            {/* Progress mini-bar for current/done */}
+            {unlocked && (
+              <div className="mt-3 flex items-center gap-2">
+                <div className="flex-1 h-1 bg-stone-100 rounded-full overflow-hidden">
+                  <div
+                    className="h-full bg-amber-500 rounded-full transition-all duration-500"
+                    style={{
+                      width: `${day.tasks.length > 0 ? (doneTasks / day.tasks.length) * 100 : 0}%`,
+                    }}
+                  />
+                </div>
+                <span className="text-[10px] text-stone-400 flex-shrink-0">
+                  {doneTasks}/{day.tasks.length}
+                </span>
+              </div>
+            )}
+          </div>
+        </button>
+      </div>
+    </div>
+  );
+}
+
+// ─── Kaaba Destination ────────────────────────────────────────────────────────
+
 function KaabaDestination({ unlocked }: { unlocked: boolean }) {
   return (
-    <div className="mx-4 mt-6 rounded-2xl overflow-hidden border-2 border-gold/40">
-      {/* Dark header mimicking the Kaaba */}
-      <div className="bg-primary-dark relative flex flex-col items-center py-6 px-4">
-        {/* Kaaba shape */}
-        <div className="relative w-16 h-20 bg-[#111] rounded border-2 border-gold/60 mb-3">
-          {/* Kiswa band */}
-          <div className="absolute top-6 left-0 right-0 h-3 bg-gold/80" />
-          {/* Door */}
-          <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-5 h-7 bg-gold/70 rounded-t" />
+    <div className="mx-4 mt-2 mb-6 rounded-2xl overflow-hidden border border-stone-200">
+      <div className="bg-stone-800 relative flex flex-col items-center py-8 px-4">
+        <div className="relative w-14 h-18 mb-3">
+          <div className="w-14 h-18 bg-stone-900 rounded border-2 border-amber-500/60 flex flex-col items-center justify-end pb-0 overflow-hidden">
+            <div className="absolute top-5 left-0 right-0 h-2.5 bg-amber-500/70" />
+            <div className="w-4 h-6 bg-amber-500/60 rounded-t mb-0" />
+          </div>
         </div>
-        <p
-          className="text-white text-base"
-          style={{ fontFamily: "'Amiri', serif" }}
-        >
-          الكعبة المشرفة
-        </p>
-        <p className="text-white/40 text-[10px] font-sans mt-1">
+        <p className="text-white text-sm font-medium mt-1">الكعبة المشرفة</p>
+        <p className="text-white/40 text-[10px] mt-0.5">
           الوجهة النهائية للرحلة
         </p>
       </div>
 
-      {/* Lock overlay */}
-      {!unlocked && (
-        <div className="bg-[#F5F0E8]/90 flex flex-col items-center justify-center py-5 gap-2 border-t border-gold/20">
-          <Lock size={28} className="text-primary/30" />
-          <p className="text-xs font-sans text-primary/50 text-center">
+      {!unlocked ? (
+        <div className="bg-stone-50 flex flex-col items-center justify-center py-5 gap-2 border-t border-stone-200">
+          <Lock size={24} className="text-stone-300" />
+          <p className="text-xs text-stone-400 text-center">
             أكمل العشر أيام لتفتح هذه المرحلة
           </p>
         </div>
-      )}
-
-      {unlocked && (
-        <div className="bg-amber-50 flex flex-col items-center justify-center py-4 gap-1 border-t border-gold/20">
-          <Award size={24} className="text-gold" />
-          <p className="text-xs font-sans text-gold font-medium">
+      ) : (
+        <div className="bg-amber-50 flex flex-col items-center justify-center py-4 gap-1 border-t border-amber-200">
+          <Award size={22} className="text-amber-600" />
+          <p className="text-xs text-amber-700 font-medium">
             وصلت! بارك الله فيك
           </p>
         </div>
@@ -342,7 +365,6 @@ export default function ChallengesPage() {
 
   const unlockedDays = getUnlockedDays();
 
-  // تحميل التحديات
   useEffect(() => {
     const loadChallenges = async () => {
       try {
@@ -362,7 +384,6 @@ export default function ChallengesPage() {
     loadChallenges();
   }, []);
 
-  // تحميل الإكمالات
   useEffect(() => {
     if (!user) {
       setLoading(false);
@@ -387,7 +408,6 @@ export default function ChallengesPage() {
     loadCompletions();
   }, [user]);
 
-  // تبديل المهمة
   const toggleTask = async (taskId: string) => {
     if (!user || togglingTask) return;
     setTogglingTask(taskId);
@@ -439,7 +459,6 @@ export default function ChallengesPage() {
     }
   };
 
-  // إحصائيات
   const totalPoints = Object.values(completions).reduce(
     (sum, c) => sum + (c.points || 0),
     0,
@@ -448,94 +467,109 @@ export default function ChallengesPage() {
   const totalTasks = days.reduce((sum, d) => sum + d.tasks.length, 0);
   const overallProgress =
     totalTasks > 0 ? (totalCompleted / totalTasks) * 100 : 0;
+  const doneDays = days.filter(
+    (d) =>
+      d.id < unlockedDays ||
+      (d.id === unlockedDays && d.tasks.every((t) => completions[t.id])),
+  ).length;
   const allComplete = totalTasks > 0 && totalCompleted === totalTasks;
 
   if (authLoading || loading) {
     return (
-      <div className="min-h-screen bg-[#F5F0E8] flex items-center justify-center">
-        <Loader2 size={36} className="text-gold animate-spin" />
+      <div className="min-h-screen bg-white flex items-center justify-center">
+        <Loader2 size={32} className="text-amber-500 animate-spin" />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-[#F5F0E8] text-primary" dir="rtl">
-      <Image src={Banner} alt="banner" className="aspect-ratio[2/1]" />
+    <div
+      className="min-h-screen bg-white text-stone-800"
+      dir="rtl"
+      style={{
+        fontFamily: "'Thmanyah Sans', sans-serif",
+      }}
+    >
+      {/* Keyframe for current node pulse */}
+      <style>{`
+        @keyframes pulseRing {
+          0%, 100% { box-shadow: 0 0 0 0 rgba(217,119,6,0.3); }
+          50% { box-shadow: 0 0 0 8px rgba(217,119,6,0); }
+        }
+      `}</style>
 
-      {/* ── Stats ── */}
+      {/* Banner */}
+      <Image src={Banner} alt="banner" className="w-full" />
+
+      {/* ── Dashboard header ── */}
       {user && (
-        <div className="flex gap-2 px-4 py-3 bg-white border-b border-primary/8">
-          {[
-            { val: totalPoints, lbl: "نقطة" },
-            { val: totalCompleted, lbl: "مهمة" },
-            { val: unlockedDays, lbl: "يوم مفتوح" },
-            { val: CHALLENGE_DURATION_DAYS, lbl: "يوم" },
-          ].map((s) => (
-            <div
-              key={s.lbl}
-              className="flex-1 text-center bg-[#F5F0E8] rounded-2xl py-2 border border-primary/8"
-            >
-              <div className="text-base font-bold text-gold leading-none">
-                {s.val}
+        <div className="bg-white border-b border-stone-100">
+          {/* Stats row */}
+          <div className="grid grid-cols-3 gap-0 divide-x divide-x-reverse divide-stone-100">
+            <div className="py-4 px-3 text-center">
+              <div className="text-2xl font-bold text-amber-600 leading-none">
+                {totalPoints}
               </div>
-              <div className="text-[9px] font-sans text-primary/50 mt-0.5">
-                {s.lbl}
-              </div>
+              <div className="text-[10px] text-stone-400 mt-1">نقطة</div>
             </div>
-          ))}
-        </div>
-      )}
+            <div className="py-4 px-3 text-center">
+              <div className="text-2xl font-bold text-stone-700 leading-none">
+                {unlockedDays}
+              </div>
+              <div className="text-[10px] text-stone-400 mt-1">يوم مفتوح</div>
+            </div>
+            <div className="py-4 px-3 text-center">
+              <div className="text-2xl font-bold text-stone-700 leading-none">
+                {doneDays}
+                <span className="text-base text-stone-300">
+                  /{CHALLENGE_DURATION_DAYS}
+                </span>
+              </div>
+              <div className="text-[10px] text-stone-400 mt-1">أيام مكتملة</div>
+            </div>
+          </div>
 
-      {/* ── Progress bar ── */}
-      {user && (
-        <div className="px-4 py-3 bg-white border-b border-primary/8">
-          <div className="flex items-center justify-between mb-1.5">
-            <div className="flex items-center gap-1.5">
-              <TrendingUp size={14} className="text-gold" />
-              <span className="text-xs font-sans text-primary/60">
-                نحو الكعبة
+          {/* Progress */}
+          <div className="px-4 pb-4">
+            <div className="flex items-center justify-between mb-2">
+              <div className="flex items-center gap-1.5">
+                <TrendingUp size={13} className="text-amber-500" />
+                <span className="text-[11px] text-stone-500">
+                  نحو الكعبة المشرفة
+                </span>
+              </div>
+              <span className="text-[11px] font-medium text-amber-600">
+                {Math.round(overallProgress)}%
               </span>
             </div>
-            <span className="text-xs font-sans text-gold font-medium">
-              {Math.round(overallProgress)}%
-            </span>
-          </div>
-          <div className="h-2 bg-primary/8 rounded-full overflow-hidden">
-            <div
-              className="h-full bg-gold rounded-full transition-all duration-700"
-              style={{ width: `${overallProgress}%` }}
-            />
-          </div>
-          <div className="flex items-center justify-between mt-1.5">
-            <span className="text-[10px] font-sans text-primary/30 flex items-center gap-1">
-              <Calendar size={10} />
-              الأيام المفتوحة: {unlockedDays} من {CHALLENGE_DURATION_DAYS}
-            </span>
-            <span className="text-[10px] font-sans text-gold">
-              {totalPoints} نقطة
-            </span>
+            <div className="h-1.5 bg-stone-100 rounded-full overflow-hidden">
+              <div
+                className="h-full bg-amber-500 rounded-full transition-all duration-700"
+                style={{ width: `${overallProgress}%` }}
+              />
+            </div>
           </div>
         </div>
       )}
 
       {/* ── Login prompt ── */}
       {!user && (
-        <div className="mx-4 mt-6 bg-white rounded-2xl border border-primary/10 p-6 text-center">
-          <MapPin size={28} className="text-gold mx-auto mb-3" />
-          <p className="text-sm font-sans text-primary/60 mb-4">
+        <div className="mx-4 mt-6 bg-amber-50 rounded-2xl border border-amber-200 p-6 text-center">
+          <MapPin size={26} className="text-amber-500 mx-auto mb-3" />
+          <p className="text-sm text-stone-600 mb-4">
             سجّل دخولك للمشاركة في الرحلة وتتبع تقدمك
           </p>
           <div className="flex items-center justify-center gap-3">
             <button
               onClick={() => router.push("/auth/login")}
-              className="flex items-center gap-1.5 px-5 py-2 rounded-xl border border-gold/30 text-gold text-sm font-sans hover:bg-gold/8 transition-all"
+              className="flex items-center gap-1.5 px-5 py-2 rounded-xl border border-amber-300 text-amber-700 text-sm hover:bg-amber-100 transition-all"
             >
               <LogIn size={14} />
               تسجيل الدخول
             </button>
             <button
               onClick={() => router.push("/auth/register")}
-              className="flex items-center gap-1.5 px-5 py-2 rounded-xl bg-gold text-white text-sm font-sans hover:bg-gold-light transition-all"
+              className="flex items-center gap-1.5 px-5 py-2 rounded-xl bg-amber-600 text-white text-sm hover:bg-amber-700 transition-all"
             >
               <UserPlus size={14} />
               حساب جديد
@@ -544,100 +578,86 @@ export default function ChallengesPage() {
         </div>
       )}
 
-      {/* ── Journey map ── */}
-      <div className="px-4 py-6 space-y-3 relative">
-        {/* Vertical dotted spine */}
-        <div
-          className="absolute left-1/2 top-0 bottom-0 w-px -translate-x-1/2 pointer-events-none"
-          style={{
-            backgroundImage:
-              "repeating-linear-gradient(to bottom, #C8A870 0, #C8A870 8px, transparent 8px, transparent 16px)",
-          }}
-        />
+      {/* ── Journey timeline ── */}
+      <div className="px-4 pt-6 pb-2">
+        {/* Section label */}
+        <div className="flex items-center gap-2 mb-5">
+          <span className="text-xs font-medium text-stone-400 uppercase tracking-widest">
+            تحديات العشر
+          </span>
+          <div className="flex-1 h-px bg-stone-100" />
+        </div>
 
-        {days.map((day, idx) => {
-          const unlocked = day.id <= unlockedDays;
-          const doneTasks = day.tasks.filter((t) => completions[t.id]).length;
-          const allDone = unlocked && doneTasks === day.tasks.length;
-          const isCurrent = day.id === unlockedDays && !allDone;
-          const isExpanded = expandedDay === day.id;
-          const isRight = idx % 2 === 0;
+        {/* Cards */}
+        <div>
+          {days.map((day, idx) => {
+            const unlocked = day.id <= unlockedDays;
+            const doneTasks = day.tasks.filter((t) => completions[t.id]).length;
+            const allDone = unlocked && doneTasks === day.tasks.length;
+            const isCurrent = day.id === unlockedDays && !allDone;
+            const isDone = unlocked && (day.id < unlockedDays || allDone);
+            const isExpanded = expandedDay === day.id;
 
-          const handleToggle = () => {
-            if (!unlocked) {
-              showToast("هذا اليوم لم يفتح بعد", "info");
-              return;
-            }
-            if (!user) {
-              router.push("/auth/login");
-              return;
-            }
-            setExpandedDay(isExpanded ? null : day.id);
-          };
+            const handleToggle = () => {
+              if (!unlocked) {
+                showToast("هذا اليوم لم يفتح بعد", "info");
+                return;
+              }
+              if (!user) {
+                router.push("/auth/login");
+                return;
+              }
+              setExpandedDay(isExpanded ? null : day.id);
+            };
 
-          return (
-            <div key={day.id} className="relative z-10">
-              {/* Stage row */}
-              <div
-                className={`flex items-center gap-2.5 ${
-                  isRight ? "flex-row-reverse pr-1" : "flex-row pl-1"
-                }`}
-              >
-                <StageNode
+            return (
+              <div key={day.id}>
+                <DayCard
                   day={day}
                   unlocked={unlocked}
-                  allDone={allDone}
+                  doneTasks={doneTasks}
+                  isOpen={isExpanded}
                   isCurrent={isCurrent}
+                  isDone={isDone}
+                  isFirst={idx === 0}
+                  isLast={idx === days.length - 1}
                   onClick={handleToggle}
                 />
 
-                <div className={`flex-1 max-w-[200px] ${isRight ? "" : ""}`}>
-                  <StageCard
-                    day={day}
-                    unlocked={unlocked}
-                    doneTasks={doneTasks}
-                    isOpen={isExpanded}
-                    isCurrent={isCurrent}
-                    onClick={handleToggle}
-                  />
-                </div>
-              </div>
-
-              {/* Tasks drawer */}
-              {isExpanded && unlocked && (
-                <div className="mt-2 mb-1 pr-4 border-r-2 border-gold/20 space-y-1.5 animate-fade-in-up">
-                  <div className="flex items-center justify-between px-2 py-1">
-                    <span className="text-[10px] font-sans font-medium text-primary/40">
-                      المهام
-                    </span>
-                    <span className="text-[10px] font-sans text-gold/60">
-                      مجموع النقاط:{" "}
-                      {day.tasks.reduce((s, t) => s + t.points, 0)}
-                    </span>
+                {/* Tasks drawer */}
+                {isExpanded && unlocked && (
+                  <div className="mr-13 mb-3 pr-3 mr-[52px] space-y-1.5">
+                    <div className="flex items-center justify-between px-1 py-1 mb-2">
+                      <span className="text-[10px] text-stone-400">
+                        المهام اليومية
+                      </span>
+                      <span className="text-[10px] text-amber-600">
+                        {day.tasks.reduce((s, t) => s + t.points, 0)} نقطة
+                        إجمالاً
+                      </span>
+                    </div>
+                    {day.tasks.map((task) => (
+                      <TaskRow
+                        key={task.id}
+                        task={task}
+                        completed={!!completions[task.id]}
+                        toggling={togglingTask === task.id}
+                        onToggle={toggleTask}
+                      />
+                    ))}
                   </div>
-                  {day.tasks.map((task) => (
-                    <TaskRow
-                      key={task.id}
-                      task={task}
-                      completed={!!completions[task.id]}
-                      toggling={togglingTask === task.id}
-                      onToggle={toggleTask}
-                    />
-                  ))}
-                </div>
-              )}
-            </div>
-          );
-        })}
+                )}
+              </div>
+            );
+          })}
+        </div>
       </div>
 
       {/* ── Kaaba destination ── */}
       <KaabaDestination unlocked={allComplete} />
 
-      <div
-        className="py-8 text-center text-gold/30 text-xl"
-        style={{ fontFamily: "'Amiri', serif" }}
-      >
+      {/* Footer ornament */}
+      <div className="py-6 text-center text-amber-300 text-lg tracking-widest">
         ✦ ✧ ✦
       </div>
     </div>

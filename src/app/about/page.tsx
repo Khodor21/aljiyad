@@ -44,10 +44,10 @@ export default function AboutPage() {
       <div className="max-w-3xl mx-auto px-4 py-8">
         {/* الترويسة */}
         <div className="text-center mb-10 animate-fade-in-up">
-          <h1 className="text-3xl font-black text-gold mb-3">
+          <h1 className="text-xl font-black text-gold mb-3">
             ما هو تحدي محراب العشر؟{" "}
           </h1>
-          <p className="text-primary/50 text-sm leading-relaxed max-w-lg mx-auto">
+          <p className="text-primary text-xs leading-relaxed max-w-lg mx-auto">
             تحدي يومي لمدة عشرة أيام يستهدف استغلال أفضل أيام الدنيا عند الله عز
             وجل
           </p>
@@ -58,14 +58,14 @@ export default function AboutPage() {
           style={{ animationDelay: "0.1s" }}
         >
           <div className="absolute top-4 right-4 text-gold/10">
-            <Quote size={60} />
+            <Quote size={52} />
           </div>
           <div className="relative z-10">
-            <p className="text-primary/90 text-lg leading-loose font-semibold mb-3">
+            <p className="text-primary/90 text-base font-semibold mb-3">
               "ما من أيام العمل الصالح فيهن أحب إلى الله من هذه الأيام العشر"
             </p>
-            <p className="text-primary/40 text-sm">رواه البخاري</p>
-            <p className="text-primary/70 text-sm leading-relaxed mt-4">
+            <p className="text-primary/40 text-xs">رواه البخاري</p>
+            <p className="text-primary/70 text-xs leading-relaxed mt-4">
               قالوا : يا رسولَ اللهِ ولا الجهادُ في سبيلِ اللهِ ؟ فقال رسولُ
               اللهِ صلَّى اللهُ عليه وسلَّم : ولا الجهادُ في سبيلِ اللهِ إلَّا
               رجل خرج بنفسِه ومالِه فلم يرجِعْ من ذلك بشيءٍ{" "}
@@ -141,12 +141,12 @@ export default function AboutPage() {
               },
             ].map((item, i) => (
               <div key={i} className="flex items-start gap-3">
-                <div className="w-8 h-8 rounded-lg gold-gradient flex items-center justify-center flex-shrink-0">
-                  <span className="text-sm font-bold text-white">
+                <div className="w-6 h-6 rounded-lg gold-gradient flex items-center justify-center flex-shrink-0">
+                  <span className="text-xs font-bold text-white">
                     {item.step}
                   </span>
                 </div>
-                <p className="text-sm text-primary/60 leading-relaxed pt-1">
+                <p className="text-xs text-primary/60 leading-relaxed pt-1">
                   {item.text}
                 </p>
               </div>
