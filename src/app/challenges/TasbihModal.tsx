@@ -43,48 +43,48 @@ export default function TasbihModal({
   }, [isOpen]);
 
   // Fire confetti once when hitting 100
-  useEffect(() => {
-    if (count === 100 && !hasShownCelebration.current) {
-      hasShownCelebration.current = true;
-      setCelebrated(true);
+  // useEffect(() => {
+  //   if (count === 100 && !hasShownCelebration.current) {
+  //     hasShownCelebration.current = true;
+  //     setCelebrated(true);
 
-      const fire = (particleRatio: number, opts: confetti.Options) => {
-        confetti({
-          origin: { y: 0.7 },
-          ...opts,
-          particleCount: Math.floor(200 * particleRatio),
-        });
-      };
+  //     const fire = (particleRatio: number, opts: confetti.Options) => {
+  //       confetti({
+  //         origin: { y: 0.7 },
+  //         ...opts,
+  //         particleCount: Math.floor(200 * particleRatio),
+  //       });
+  //     };
 
-      fire(0.25, {
-        spread: 26,
-        startVelocity: 55,
-        colors: ["#f59e0b", "#d97706", "#fbbf24"],
-      });
-      fire(0.2, { spread: 60, colors: ["#10b981", "#34d399", "#6ee7b7"] });
-      fire(0.35, {
-        spread: 100,
-        decay: 0.91,
-        scalar: 0.8,
-        colors: ["#f59e0b", "#fbbf24", "#ffffff"],
-      });
-      fire(0.1, {
-        spread: 120,
-        startVelocity: 25,
-        decay: 0.92,
-        scalar: 1.2,
-        colors: ["#d97706"],
-      });
-      fire(0.1, {
-        spread: 120,
-        startVelocity: 45,
-        colors: ["#f59e0b", "#fbbf24"],
-      });
+  //     fire(0.25, {
+  //       spread: 26,
+  //       startVelocity: 55,
+  //       colors: ["#f59e0b", "#d97706", "#fbbf24"],
+  //     });
+  //     fire(0.2, { spread: 60, colors: ["#10b981", "#34d399", "#6ee7b7"] });
+  //     fire(0.35, {
+  //       spread: 100,
+  //       decay: 0.91,
+  //       scalar: 0.8,
+  //       colors: ["#f59e0b", "#fbbf24", "#ffffff"],
+  //     });
+  //     fire(0.1, {
+  //       spread: 120,
+  //       startVelocity: 25,
+  //       decay: 0.92,
+  //       scalar: 1.2,
+  //       colors: ["#d97706"],
+  //     });
+  //     fire(0.1, {
+  //       spread: 120,
+  //       startVelocity: 45,
+  //       colors: ["#f59e0b", "#fbbf24"],
+  //     });
 
-      // Auto-hide celebration message after 4s
-      setTimeout(() => setCelebrated(false), 4000);
-    }
-  }, [count]);
+  //     // Auto-hide celebration message after 4s
+  //     setTimeout(() => setCelebrated(false), 4000);
+  //   }
+  // }, [count]);
 
   const handlePress = useCallback(() => {
     setCount((c) => c + 1);
