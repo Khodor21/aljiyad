@@ -239,7 +239,7 @@ export default function ProfilePage() {
             })}
           </div>
         </div>
-        <div className="md:hidden block mx-auto">
+        <div className="md:hidden block mx-auto text-center">
           <button
             onClick={handleLogout}
             className="flex items-center gap-2 px-4 py-2 rounded-lg bg-red-500 text-white active:scale-95 transition"
@@ -249,7 +249,6 @@ export default function ProfilePage() {
           </button>
         </div>
       </div>
-
       {/* 🔥 MOBILE ONLY LOGOUT BUTTON */}
     </div>
   );
