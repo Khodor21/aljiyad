@@ -402,7 +402,6 @@ button,
 
 /* تم تغيير الوزن هنا من 600 إلى 500 ليتوافق مع الملفات المحملة */
 a,
-label,
 p,
 span,
 h3,
@@ -410,7 +409,10 @@ div {
   font-family: "Thmanyah Sans", sans-serif;
   font-weight: 500;
 }
-
+label {
+  font-family: "Thmanyah Sans", sans-serif;
+  font-weight: 400;
+}
 h1,
 h2 {
   font-family: "Thmanyah Sans", sans-serif;

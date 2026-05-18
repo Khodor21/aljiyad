@@ -639,17 +639,17 @@ export default function ChallengesPage() {
           <p className="text-sm text-stone-600 mb-4">
             سجّل دخولك للمشاركة في الرحلة وتتبع تقدمك
           </p>
-          <div className="flex items-center justify-center gap-3">
+          <div className="flex items-center justify-center gap-2">
             <button
               onClick={() => router.push("/auth/login")}
-              className="flex items-center gap-1.5 px-5 py-2 rounded-xl border border-amber-300 text-amber-700 text-sm hover:bg-amber-100 transition-all"
+              className="flex items-center gap-1 px-6 py-2 rounded-xl border border-amber-300 text-amber-700 text-sm hover:bg-amber-100 transition-all"
             >
               <LogIn size={14} />
               تسجيل الدخول
             </button>
             <button
               onClick={() => router.push("/auth/register")}
-              className="flex items-center gap-1.5 px-5 py-2 rounded-xl bg-gold text-white text-sm hover:bg-amber-700 transition-all"
+              className="flex items-center gap-1 px-6 py-2 rounded-xl bg-gold text-white text-sm hover:bg-amber-700 transition-all"
             >
               <UserPlus size={14} />
               حساب جديد
