@@ -34,15 +34,15 @@
     "icon": "clock",
     "tasks": [
       {
-        "id": "1_0",
+        "id": "2_0",
         "name": "الحمد 100 مرة + التكبير",
         "points": 1,
         "type": "estighfar"
       },
-      { "id": "1_1", "name": "صلاة ركعتي قيام ليل", "points": 1 },
-      { "id": "1_2", "name": "قراءة صفحتين من القرآن الكريم", "points": 1 },
+      { "id": "2_1", "name": "صلاة ركعتي قيام ليل", "points": 1 },
+      { "id": "2_2", "name": "قراءة صفحتين من القرآن الكريم", "points": 1 },
       {
-        "id": "1_3",
+        "id": "2_3",
         "name": "قراءة الورد الأول من كتاب أنوار الأنبياء",
         "points": 1,
         "type": "book",
@@ -51,7 +51,7 @@
         "pdfUrl": "https://drive.google.com/file/d/1UjvK36C36OVzZPgPpB6qe7u_kS3haQdR/view?usp=sharing"
       },
       {
-        "id": "1_4",
+        "id": "2_4",
         "name": "في العشر…لا تحرم نفسك أجر الصدقة ولو بالقليل",
         "points": 1
       }
