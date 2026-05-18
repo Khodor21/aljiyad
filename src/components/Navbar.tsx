@@ -46,7 +46,7 @@ export default function App() {
     [],
   );
 
-  // ✅ ALWAYS visible links (even if not logged in)
+  // ✅ ALWAYS visible links
   const persistentLinks: NavLink[] = useMemo(
     () => [
       { href: "/profile", label: "الملف الشخصي", icon: LuUserRound },
@@ -75,9 +75,9 @@ export default function App() {
 
   return (
     <div dir="rtl">
-      {/* TOP NAVBAR */}
-      <nav className="fixed inset-x-0 top-0 z-50 border-b border-amber-300/20 bg-white/90 backdrop-blur-xl">
-        <div className="mx-auto hidden md:flex h-16 max-w-6xl items-center justify-between px-4">
+      {/* DESKTOP NAVBAR ONLY */}
+      <nav className="fixed inset-x-0 top-0 z-50 hidden border-b border-amber-300/20 bg-white/90 backdrop-blur-xl md:block">
+        <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4">
           {/* Logo */}
           <Link href="/challenges" className="flex items-center gap-2">
             <div className="grid h-10 w-10 place-items-center rounded-xl bg-amber-200/15">
@@ -86,7 +86,7 @@ export default function App() {
           </Link>
 
           {/* LINKS */}
-          <div className="hidden items-center gap-1 md:flex">
+          <div className="flex items-center gap-1">
             {authLinks.map((link) => (
               <Link
                 key={link.href}
@@ -103,7 +103,7 @@ export default function App() {
               </Link>
             ))}
 
-            {/* AUTH BUTTONS */}
+            {/* AUTH BUTTONS DESKTOP ONLY */}
             {isLoggedIn ? (
               <button
                 onClick={handleLogout}
@@ -116,7 +116,7 @@ export default function App() {
               <div className="mr-2 flex items-center gap-2">
                 <button
                   onClick={() => router.push("/auth/login")}
-                  className="flex items-center gap-2 rounded-lg px-4 py-2 text-xs font-semibold text-amber-100 bg-amber-400/10"
+                  className="flex items-center gap-2 rounded-lg bg-amber-400/10 px-4 py-2 text-xs font-semibold text-amber-100"
                 >
                   <FaRightToBracket className="w-3 h-3" />
                   دخول
@@ -133,27 +133,6 @@ export default function App() {
             )}
           </div>
         </div>
-
-        {/* MOBILE TOP ACTION */}
-        <div className="flex items-center gap-2 md:hidden px-4 h-16 justify-end">
-          {isLoggedIn ? (
-            <button
-              onClick={handleLogout}
-              className="flex items-center gap-2 text-sm"
-            >
-              <FaRightFromBracket />
-              خروج
-            </button>
-          ) : (
-            <button
-              onClick={() => router.push("/auth/login")}
-              className="flex items-center gap-2 text-sm"
-            >
-              <FaRightToBracket />
-              دخول
-            </button>
-          )}
-        </div>
       </nav>
 
       {/* MOBILE BOTTOM NAV */}
@@ -168,7 +147,7 @@ export default function App() {
                 isActive(link.href) ? "text-gold" : "text-black"
               }`}
             >
-              <link.icon className="w-5 h-5" />
+              <link.icon className="h-5 w-5" />
               <span className="text-[13px]">{link.label}</span>
             </Link>
           ))}
