@@ -117,7 +117,7 @@
       }
     ]
   },
- {
+  {
     "id": 5,
     "title": "اليوم الخامس",
     "description": "صُم هذا اليوم واكسب الأجر العظيم",
@@ -131,7 +131,7 @@
         "type": "book",
         "pdfDay": 5,
 
-        "pdfUrl":"https://drive.google.com/file/d/1BZCfHc-qwH0X9K76VwL65ERhvKoRJGJg/view?usp=sharing"
+        "pdfUrl": "https://drive.google.com/file/d/1BZCfHc-qwH0X9K76VwL65ERhvKoRJGJg/view?usp=sharing"
       },
       {
         "id": "5_2",
@@ -153,21 +153,32 @@
     "description": "بذل المال في سبيل الله من أعظم القربات",
     "icon": "gift",
     "tasks": [
-      { "id": "6_0", "name": "التصدق ولو بدرهم أو أقل", "points": 15 },
-      { "id": "6_1", "name": "إطعام مسكين طعامًا يشبعه", "points": 20 },
-      { "id": "6_2", "name": "مساعدة شخص محتاج في حاجته", "points": 20 },
-      { "id": "6_3", "name": "الإحسان إلى جارك بهدية أو معروف", "points": 15 },
+      { "id": "6_0", "name": "قراءة صفحتين من القرآن الكريم", "points": 1 },
+      {
+        "id": "6_1",
+        "name": "قراءة الورد السادس من كتاب أنوار الأنبياء",
+        "points": 1,
+        "type": "book",
+        "pdfDay": 6,
+
+        "pdfUrl": "https://drive.google.com/file/d/1BZCfHc-qwH0X9K76VwL65ERhvKoRJGJg/view?usp=sharing"
+      },
+      {
+        "id": "6_2",
+        "name": "التهليل 100 مرة + التكبير",
+        "points": 1,
+        "type": "estighfar"
+      },
+      { "id": "6_3", "name": "صلاة ركعتي قيام ليل", "points": 1 },
       {
         "id": "6_4",
-        "name": "التبرع لمشروع خيري ولو بمبلغ بسيط",
-        "points": 15
+        "name": "تواصل مع ثلاثة أشخاص انقطع حديثك معهم.",
+        "points": 1
       },
       {
         "id": "6_5",
-        "name": "قراءة الورد السادس من كتاب أنوار الأنبياء",
-        "points": 15,
-        "type": "book",
-        "pdfDay": 6
+        "name": "لسانٌ بلا شكوى، جرّب أن لا تتذمر اليوم",
+        "points": 1
       }
     ]
   },
