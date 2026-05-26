@@ -27,12 +27,10 @@ import {
   Loader2,
   Lock,
   CheckCircle2,
-  Circle,
   Check,
   Star,
   MapPin,
   TrendingUp,
-  Calendar,
   LogIn,
   UserPlus,
   Sunrise,
@@ -46,15 +44,16 @@ import {
   Bird,
   Award,
   BookMarked,
-  ExternalLink,
 } from "lucide-react";
+
+// ─── Types ────────────────────────────────────────────────────────────────────
 
 interface Task {
   id: string;
   name: string;
   points: number;
-  type?: string; // "book" for PDF-linked tasks
-  pdfDay?: number; // which day's PDF to open
+  type?: string;
+  pdfDay?: number;
   pdfUrl?: string;
 }
 
@@ -66,20 +65,23 @@ interface DayData {
   tasks: Task[];
 }
 
+// ─── Constants ────────────────────────────────────────────────────────────────
+
 const DAY_META: Record<number, { env: string; Icon: LucideIcon }> = {
-  1: { env: "1 ذو الحجة ", Icon: Sunrise },
-  2: { env: "ذو الحجة 2 ", Icon: Star },
+  1: { env: "1 ذو الحجة", Icon: Sunrise },
+  2: { env: "ذو الحجة 2", Icon: Star },
   3: { env: "ذو الحجة 3", Icon: BookOpen },
-  4: { env: "ذو الحجة 4 ", Icon: Heart },
-  5: { env: "ذو الحجة 5 ", Icon: Leaf },
-  6: { env: "ذو الحجة 6 ", Icon: Gem },
-  7: { env: "7 ذو الحجة ", Icon: Flame },
+  4: { env: "ذو الحجة 4", Icon: Heart },
+  5: { env: "ذو الحجة 5", Icon: Leaf },
+  6: { env: "ذو الحجة 6", Icon: Gem },
+  7: { env: "7 ذو الحجة", Icon: Flame },
   8: { env: "ذو الحجة 8", Icon: Mountain },
   9: { env: "ذو الحجة 9", Icon: Bird },
-  10: { env: "ذوالحجة 10", Icon: Moon },
+  10: { env: "ذو الحجة 10", Icon: Moon },
 };
 
-// ── FIX #1: NaN guard — ensure result is always a valid integer ──────────────
+// ─── Helpers ──────────────────────────────────────────────────────────────────
+
 const getUnlockedDays = (): number => {
   try {
     const now = new Date();
@@ -94,8 +96,245 @@ const getUnlockedDays = (): number => {
   }
 };
 
+// ─── Eid Modal ────────────────────────────────────────────────────────────────
+
+function EidModal({ onClose }: { onClose: () => void }) {
+  return (
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center p-4"
+      style={{
+        backdropFilter: "blur(8px)",
+        WebkitBackdropFilter: "blur(8px)",
+        background: "rgba(0,0,0,0.6)",
+      }}
+    >
+      <div
+        dir="rtl"
+        style={{
+          background: "#2a1400",
+          border: "1px solid rgba(212,160,60,0.45)",
+          borderRadius: "24px",
+          padding: "32px 28px 28px",
+          maxWidth: "340px",
+          width: "100%",
+          textAlign: "center",
+          fontFamily: "Georgia, serif",
+        }}
+      >
+        {/* SVG Sheep Illustration */}
+        <div
+          style={{
+            marginBottom: "20px",
+            display: "flex",
+            justifyContent: "center",
+          }}
+        >
+          <svg
+            width="200"
+            height="110"
+            viewBox="0 0 200 110"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            {/* Shadow */}
+            <ellipse
+              cx="100"
+              cy="82"
+              rx="90"
+              ry="10"
+              fill="#1a0a00"
+              opacity="0.5"
+            />
+
+            {/* Legs */}
+            <rect x="68" y="78" width="8" height="18" rx="3" fill="#5a3a1a" />
+            <rect x="84" y="78" width="8" height="18" rx="3" fill="#5a3a1a" />
+            <rect x="108" y="78" width="8" height="18" rx="3" fill="#5a3a1a" />
+            <rect x="124" y="78" width="8" height="18" rx="3" fill="#5a3a1a" />
+
+            {/* Body wool */}
+            <ellipse cx="100" cy="68" rx="40" ry="26" fill="#e8d5b0" />
+            <ellipse cx="100" cy="62" rx="38" ry="22" fill="#f0e0c0" />
+            <ellipse cx="85" cy="58" rx="12" ry="10" fill="#f0e0c0" />
+            <ellipse cx="115" cy="58" rx="12" ry="10" fill="#f0e0c0" />
+            <ellipse cx="100" cy="52" rx="14" ry="11" fill="#f0e0c0" />
+
+            {/* Neck + Head */}
+            <ellipse cx="130" cy="60" rx="22" ry="18" fill="#f0e0c0" />
+            <ellipse cx="130" cy="44" rx="16" ry="14" fill="#f5ead5" />
+            <ellipse cx="130" cy="44" rx="14" ry="12" fill="#f5ead5" />
+
+            {/* Ears */}
+            <ellipse cx="122" cy="40" rx="6" ry="8" fill="#f5ead5" />
+            <ellipse cx="138" cy="40" rx="6" ry="8" fill="#f5ead5" />
+
+            {/* Horns */}
+            <path
+              d="M119 33 Q122 24 118 20"
+              stroke="#8B6914"
+              strokeWidth="2.5"
+              fill="none"
+              strokeLinecap="round"
+            />
+            <path
+              d="M141 33 Q138 24 142 20"
+              stroke="#8B6914"
+              strokeWidth="2.5"
+              fill="none"
+              strokeLinecap="round"
+            />
+            <circle cx="117" cy="19" r="3" fill="#8B6914" />
+            <circle cx="143" cy="19" r="3" fill="#8B6914" />
+
+            {/* Eyes */}
+            <ellipse cx="127" cy="49" rx="3" ry="2" fill="#1a0a00" />
+            <ellipse cx="134" cy="49" rx="3" ry="2" fill="#1a0a00" />
+            <ellipse cx="127" cy="49" rx="1.5" ry="1.5" fill="#3a2010" />
+            <ellipse cx="134" cy="49" rx="1.5" ry="1.5" fill="#3a2010" />
+
+            {/* Nose + mouth */}
+            <ellipse cx="130" cy="54" rx="4" ry="2.5" fill="#d4a0a0" />
+            <path d="M126 54 Q130 58 134 54" fill="#c08080" />
+
+            {/* Tail */}
+            <path
+              d="M62 68 Q52 60 56 72"
+              stroke="#e8d5b0"
+              strokeWidth="4"
+              fill="none"
+              strokeLinecap="round"
+            />
+
+            {/* Collar badge */}
+            <rect x="86" y="58" width="28" height="18" rx="6" fill="#d4a03c" />
+            <text
+              x="100"
+              y="71"
+              textAnchor="middle"
+              fontSize="10"
+              fontWeight="700"
+              fill="#5a3000"
+              fontFamily="sans-serif"
+            >
+              عيد
+            </text>
+          </svg>
+        </div>
+
+        {/* Title */}
+        <div
+          style={{
+            fontSize: "26px",
+            fontWeight: "700",
+            color: "#f0c855",
+            lineHeight: "1.4",
+            marginBottom: "6px",
+          }}
+        >
+          عيد الأضحى مبارك
+        </div>
+
+        {/* Subtitle */}
+        <div
+          style={{
+            fontSize: "16px",
+            color: "rgba(240,200,120,0.8)",
+            marginBottom: "18px",
+          }}
+        >
+          تقبّل الله منّا ومنكم صالح الأعمال
+        </div>
+
+        {/* Divider */}
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "8px",
+            marginBottom: "16px",
+          }}
+        >
+          <div
+            style={{
+              flex: 1,
+              height: "0.5px",
+              background: "rgba(212,160,60,0.35)",
+            }}
+          />
+          <div
+            style={{
+              width: "6px",
+              height: "6px",
+              background: "#d4a03c",
+              transform: "rotate(45deg)",
+              borderRadius: "1px",
+              flexShrink: 0,
+            }}
+          />
+          <div
+            style={{
+              flex: 1,
+              height: "0.5px",
+              background: "rgba(212,160,60,0.35)",
+            }}
+          />
+        </div>
+
+        {/* Message */}
+        <div
+          style={{
+            fontSize: "16px",
+            color: "rgba(255,235,185,0.88)",
+            lineHeight: "2",
+            marginBottom: "20px",
+          }}
+        >
+          كل عام وأنتم بخير وعافية
+          <br />
+          أعاده الله علينا وعليكم
+          <br />
+          بالسعادة والرحمة والمغفرة
+        </div>
+
+        {/* Ornament */}
+        <div
+          style={{
+            color: "rgba(212,160,60,0.5)",
+            letterSpacing: "8px",
+            fontSize: "14px",
+            marginBottom: "20px",
+          }}
+        >
+          ✦ ✧ ✦
+        </div>
+      </div>
+    </div>
+  );
+}
+
 // ─── Task Row ─────────────────────────────────────────────────────────────────
-// ── FIX #2: book tasks render as tappable PDF links ──────────────────────────
+
+function TasbihButton({ task }: { task: Task }) {
+  const [open, setOpen] = useState(false);
+  return (
+    <>
+      <button
+        onClick={(e) => {
+          e.stopPropagation();
+          setOpen(true);
+        }}
+        className="mt-1 mr-9 flex items-center gap-1.5 text-[11px] text-emerald-600 hover:text-emerald-800 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 hover:border-emerald-300 transition-all duration-150 px-2.5 py-1 rounded-full w-fit font-medium"
+      >
+        <span className="text-base leading-none">📿</span>
+        <span>افتح المسبحة</span>
+      </button>
+      <TasbihModal
+        isOpen={open}
+        onClose={() => setOpen(false)}
+        taskName={task.name}
+      />
+    </>
+  );
+}
 
 function TaskRow({
   task,
@@ -111,35 +350,11 @@ function TaskRow({
   const isBook = task.type === "book";
   const isEstighfar = task.type === "estighfar";
 
-  const openPdf = (task: Task) => {
-    const url = task.pdfUrl || `/pdfs/day-${task.pdfDay}.pdf`;
+  const openPdf = (t: Task) => {
+    const url = t.pdfUrl || `/pdfs/day-${t.pdfDay}.pdf`;
     window.open(url, "_blank", "noopener,noreferrer");
   };
 
-  // ── Tasbih Button (مسبحة) ─────────────────────────────────────────────────
-  function TasbihButton({ task }: { task: Task }) {
-    const [open, setOpen] = useState(false);
-    return (
-      <>
-        <button
-          onClick={(e) => {
-            e.stopPropagation();
-            setOpen(true);
-          }}
-          className="mt-1 mr-9 flex items-center gap-1.5 text-[11px] text-emerald-600 hover:text-emerald-800 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 hover:border-emerald-300 transition-all duration-150 px-2.5 py-1 rounded-full w-fit font-medium"
-        >
-          {/* Beads icon as inline SVG since lucide may not have it */}
-          <span className="text-base leading-none">📿</span>
-          <span>افتح المسبحة</span>
-        </button>
-        <TasbihModal
-          isOpen={open}
-          onClose={() => setOpen(false)}
-          taskName={task.name}
-        />
-      </>
-    );
-  }
   return (
     <div className="relative">
       <button
@@ -147,20 +362,13 @@ function TaskRow({
         disabled={toggling}
         className={`
           w-full flex items-center gap-3 px-3 py-2.5 rounded-xl border text-right transition-all duration-150
-          ${
-            completed
-              ? "bg-amber-50 border-amber-200/60"
-              : "bg-white border-stone-200 hover:border-amber-300 hover:bg-amber-50/40"
-          }
+          ${completed ? "bg-amber-50 border-amber-200/60" : "bg-white border-stone-200 hover:border-amber-300 hover:bg-amber-50/40"}
           ${toggling ? "opacity-60 cursor-wait" : "cursor-pointer"}
         `}
       >
-        {/* Checkbox */}
         <div
-          className={`
-            w-6 h-6 rounded-full border-2 flex items-center justify-center flex-shrink-0 transition-all
-            ${completed ? "bg-gold border-gold" : "border-amber-400/60 bg-white"}
-          `}
+          className={`w-6 h-6 rounded-full border-2 flex items-center justify-center flex-shrink-0 transition-all
+            ${completed ? "bg-gold border-gold" : "border-amber-400/60 bg-white"}`}
         >
           {completed && (
             <Check size={13} className="text-white" strokeWidth={2.5} />
@@ -170,7 +378,6 @@ function TaskRow({
           )}
         </div>
 
-        {/* Task name — with book icon prefix */}
         <span
           className={`flex-1 text-xs leading-snug text-right flex items-center gap-1.5 ${
             completed
@@ -197,7 +404,6 @@ function TaskRow({
         </span>
       </button>
 
-      {/* PDF link pill — shown below for book tasks */}
       {isBook && task.pdfDay && (
         <button
           onClick={(e) => {
@@ -210,6 +416,7 @@ function TaskRow({
           <span>افتح الكتاب — اليوم {task.pdfDay}</span>
         </button>
       )}
+
       {isEstighfar && <TasbihButton task={task} />}
     </div>
   );
@@ -247,22 +454,18 @@ function DayCard({
       {/* Timeline column */}
       <div className="flex flex-col items-center flex-shrink-0 w-10">
         <div
-          className={`w-px flex-shrink-0 h-3 ${
-            isDone ? "bg-amber-400" : "bg-stone-200"
-          }`}
+          className={`w-px flex-shrink-0 h-3 ${isDone ? "bg-amber-400" : "bg-stone-200"}`}
         />
 
         <div
-          className={`
-            w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 border-2 transition-all
+          className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 border-2 transition-all
             ${
               isDone
                 ? "bg-gold border-gold"
                 : isCurrent
                   ? "bg-white border-amber-500 shadow-[0_0_0_4px_rgba(217,119,6,0.12)]"
                   : "bg-stone-100 border-stone-200"
-            }
-          `}
+            }`}
           style={
             isCurrent ? { animation: "pulseRing 2s ease-in-out infinite" } : {}
           }
@@ -281,9 +484,7 @@ function DayCard({
 
         {!isLast && (
           <div
-            className={`w-px flex-1 min-h-[20px] ${
-              isDone ? "bg-amber-400" : "bg-stone-200"
-            }`}
+            className={`w-px flex-1 min-h-[20px] ${isDone ? "bg-amber-400" : "bg-stone-200"}`}
           />
         )}
       </div>
@@ -293,8 +494,7 @@ function DayCard({
         <button
           onClick={onClick}
           disabled={locked}
-          className={`
-            w-full text-right rounded-2xl border transition-all duration-200
+          className={`w-full text-right rounded-2xl border transition-all duration-200
             ${
               locked
                 ? "bg-stone-50 border-stone-100 opacity-50 cursor-default"
@@ -303,24 +503,23 @@ function DayCard({
                   : isCurrent
                     ? "bg-white border-amber-400 border-2 shadow-[0_4px_24px_rgba(217,119,6,0.12)]"
                     : "bg-white border-stone-200 hover:border-amber-200"
-            }
-          `}
+            }`}
         >
           <div className="px-4 py-3">
             <div className="flex items-center justify-between gap-2">
               <div className="flex items-center gap-2 flex-1 min-w-0">
                 <span
-                  className={`text-[10px] font-medium px-2 py-0.5 rounded-full flex-shrink-0 ${
-                    isDone
-                      ? "bg-amber-100 text-amber-700"
-                      : isCurrent
-                        ? "bg-gold text-white"
-                        : "bg-stone-100 text-stone-400"
-                  }`}
+                  className={`text-[10px] font-medium px-2 py-0.5 rounded-full flex-shrink-0
+                    ${
+                      isDone
+                        ? "bg-amber-100 text-amber-700"
+                        : isCurrent
+                          ? "bg-gold text-white"
+                          : "bg-stone-100 text-stone-400"
+                    }`}
                 >
                   يوم {day.id}
                 </span>
-
                 {!locked && (
                   <span className="text-[10px] text-stone-400 truncate">
                     {meta.env}
@@ -432,9 +631,18 @@ export default function ChallengesPage() {
   const [expandedDay, setExpandedDay] = useState<number | null>(null);
   const [loading, setLoading] = useState(true);
   const [togglingTask, setTogglingTask] = useState<string | null>(null);
+  const [showEidModal, setShowEidModal] = useState(false);
 
-  // FIX #1: unlockedDays is always a safe integer
   const unlockedDays = getUnlockedDays();
+
+  // Show Eid modal once per session
+  useEffect(() => {
+    const seen = sessionStorage.getItem("eid-adha-modal-seen");
+    if (!seen) {
+      setShowEidModal(true);
+      sessionStorage.setItem("eid-adha-modal-seen", "1");
+    }
+  }, []);
 
   useEffect(() => {
     const loadChallenges = async () => {
@@ -479,9 +687,6 @@ export default function ChallengesPage() {
     loadCompletions();
   }, [user]);
 
-  // ── FIX #3: points come from JSON task definition, not from stored value ────
-  // When toggling a task, we look up points from the loaded `days` (JSON),
-  // so points are always authoritative from challenges.json.
   const toggleTask = async (taskId: string) => {
     if (!user || togglingTask) return;
     setTogglingTask(taskId);
@@ -489,13 +694,11 @@ export default function ChallengesPage() {
       const taskRef = doc(db, "completions", user.uid, "tasks", taskId);
       const dayId = parseInt(taskId.split("_")[0]);
       const day = days.find((d) => d.id === dayId);
-      // Always get points from JSON definition — single source of truth
       const task = day?.tasks.find((t) => t.id === taskId);
       if (!task) return;
-      const taskPoints = task.points; // from JSON
+      const taskPoints = task.points;
 
       if (completions[taskId]) {
-        // Un-complete: remove completion doc, subtract JSON points
         await deleteDoc(taskRef);
         setCompletions((prev) => {
           const next = { ...prev };
@@ -506,16 +709,14 @@ export default function ChallengesPage() {
           await updateDoc(doc(db, "users", user.uid), {
             points: Math.max(0, (appUser.points || 0) - taskPoints),
           });
-          // keep appUser.points in sync locally
           appUser.points = Math.max(0, (appUser.points || 0) - taskPoints);
         }
         showToast("تم إلغاء إكمال المهمة", "info");
       } else {
-        // Complete: store JSON points inside completion doc
         await setDoc(taskRef, {
           completed: true,
           completedAt: serverTimestamp(),
-          points: taskPoints, // always from JSON
+          points: taskPoints,
         });
         setCompletions((prev) => ({
           ...prev,
@@ -540,7 +741,6 @@ export default function ChallengesPage() {
     }
   };
 
-  // totalPoints derived from completion records (which now always store JSON points)
   const totalPoints = Object.values(completions).reduce(
     (sum, c) => sum + (c.points || 0),
     0,
@@ -568,9 +768,7 @@ export default function ChallengesPage() {
     <div
       className="min-h-screen bg-white text-stone-800"
       dir="rtl"
-      style={{
-        fontFamily: "'Thmanyah Sans', sans-serif",
-      }}
+      style={{ fontFamily: "'Thmanyah Sans', sans-serif" }}
     >
       <style>{`
         @keyframes pulseRing {
@@ -579,10 +777,13 @@ export default function ChallengesPage() {
         }
       `}</style>
 
+      {/* Eid Modal */}
+      {showEidModal && <EidModal onClose={() => setShowEidModal(false)} />}
+
       {/* Banner */}
       <Image src={Banner} alt="banner" className="w-full" />
 
-      {/* ── Dashboard header ── */}
+      {/* Dashboard header */}
       {user && (
         <div className="bg-white border-b border-stone-100">
           <div className="grid grid-cols-3 gap-0 divide-x divide-x-reverse divide-stone-100">
@@ -592,7 +793,6 @@ export default function ChallengesPage() {
               </div>
               <div className="text-[10px] text-stone-400 mt-1">نقطة</div>
             </div>
-            {/* FIX #1: unlockedDays is now always a valid integer, never NaN */}
             <div className="py-4 px-3 text-center">
               <div className="text-2xl font-bold text-stone-700 leading-none">
                 {unlockedDays}
@@ -632,7 +832,7 @@ export default function ChallengesPage() {
         </div>
       )}
 
-      {/* ── Login prompt ── */}
+      {/* Login prompt */}
       {!user && (
         <div className="mx-4 mt-6 bg-amber-50 rounded-2xl border border-amber-200 p-6 text-center">
           <MapPin size={26} className="text-amber-500 mx-auto mb-3" />
@@ -658,7 +858,7 @@ export default function ChallengesPage() {
         </div>
       )}
 
-      {/* ── Journey timeline ── */}
+      {/* Journey timeline */}
       <div className="px-4 pt-6 pb-2">
         <div className="flex items-center gap-2 mb-5">
           <span className="text-xs font-medium text-stone-400 uppercase tracking-widest">
@@ -702,7 +902,6 @@ export default function ChallengesPage() {
                   onClick={handleToggle}
                 />
 
-                {/* Tasks drawer */}
                 {isExpanded && unlocked && (
                   <div className="mr-13 mb-3 pr-3 mr-[52px] space-y-1.5">
                     <div className="flex items-center justify-between px-1 py-1 mb-2">
@@ -731,7 +930,7 @@ export default function ChallengesPage() {
         </div>
       </div>
 
-      {/* ── Kaaba destination ── */}
+      {/* Kaaba destination */}
       <KaabaDestination unlocked={allComplete} />
 
       {/* Footer ornament */}
