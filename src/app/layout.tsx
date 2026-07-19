@@ -19,7 +19,7 @@ export default function RootLayout({
       <body className="">
         <AuthProvider>
           <ToastProvider>
-            <Navbar />
+            {/* <Navbar /> */}
             <main className="min-h-screen">{children}</main>
           </ToastProvider>
         </AuthProvider>
