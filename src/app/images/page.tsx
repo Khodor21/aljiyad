@@ -26,12 +26,12 @@ const sizes: ImageSize[] = [
     height: 1350,
   },
   {
-    label: "إنستغرام 1350",
+    label: "إنستغرام 1440",
     width: 1080,
     height: 1440,
   },
   {
-    label: "ستوري / 1920",
+    label: "ستوري 1920",
     width: 1080,
     height: 1920,
   },
@@ -149,7 +149,7 @@ export default function ImagesPage() {
         {/* Header */}
         <div className="text-center">
           <h1 className="text-2xl sm:text-3xl font-bold">
-            تجهيز صور المخيم الصيفي
+            تجهيز صور كشاف الجياد
           </h1>
           <p className="mt-2 text-sm sm:text-base text-white/50">
             اختر الفرقة والمقاس ثم ارفع الصور
